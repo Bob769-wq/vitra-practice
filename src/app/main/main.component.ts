@@ -7,30 +7,34 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'app-main',
   imports: [CommonModule, RouterLink, MatIcon],
   template: `
-    <section
-      class="group relative h-full p-60 bg-cover bg-center  bg-no-repeat flex justify-center items-center"
-      style="background-image: url('/sofa.jpg')"
-    >
-      <div class="relative z-10 text-center">
-        <h1
-          class="text-white text-5xl group-hover: transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 "
-        >
-          Slow Chair & Slow Sofa
-        </h1>
-        <div
-          class="opacity-0 group-hover:opacity-100 transition-all duration-700"
-        >
-          <p
-            class="text-white text-xl mb-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
+    <section class="group relative ">
+      <img
+        src="/sofa.jpg"
+        alt="slow chair slow sofa"
+        class="w-full aspect-[5/2]  object-cover"
+      />
+      <div class="absolute inset-0 flex justify-center items-center">
+        <div class="text-center">
+          <h1
+            class="text-white text-5xl translate-y-4 group-hover:translate-y-0 transition-all duration-500 "
           >
-            A haven for slowing down
-          </p>
+            Slow Chair & Slow Sofa
+          </h1>
+          <div
+            class="opacity-0 group-hover:opacity-100 transition-all duration-500"
+          >
+            <p
+              class="text-white text-xl mb-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500"
+            >
+              A haven for slowing down
+            </p>
 
-          <button
-            class="bg-white text-black px-8 py-3  transform translate-y-4 group-hover:translate-y-0 transition-all duration-500  hover:bg-gray-100"
-          >
-            MORE DETAILS
-          </button>
+            <button
+              class="bg-white text-black px-8 py-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500  hover:bg-gray-100"
+            >
+              MORE DETAILS
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -131,11 +135,13 @@ import { MatIcon } from '@angular/material/icon';
         <div class="flex gap-6 w-max">
           @for (category of categories; track category.id) {
             <div class="cursor-pointer" [routerLink]="category.link">
-              <div
-                class="w-60  h-96 bg-cover bg-center overflow-hidden "
-                style="background-image: url('{{ category.image }}')"
-              >
-                <div class="w-full h-full flex items-end p-6">
+              <div class="w-60 relative">
+                <img
+                  [src]="category.image"
+                  [alt]="category.item"
+                  class="w-full  object-cover aspect-[5/8]"
+                />
+                <div class="absolute inset-0 flex items-end p-6">
                   <h3 class="text-white text-xl font-medium">
                     {{ category.item }}
                   </h3>
