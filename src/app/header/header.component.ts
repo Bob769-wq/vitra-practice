@@ -22,7 +22,7 @@ interface NavList {
   imports: [CommonModule, MatIconModule, RouterLink],
   template: `
     <div class="relative">
-      <header class="bg-white  z-50 px-16 py-3 flex flex-col">
+      <header class="bg-white z-50  m-auto max-w-7xl py-3  flex flex-col">
         <div class="flex justify-end gap-4 text-gray-400">
           <a
             routerLink="/find-vitra"
