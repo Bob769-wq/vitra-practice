@@ -2,6 +2,29 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
+interface Categories {
+  id: number;
+  item: string;
+  image: string;
+  link: string;
+}
+
+interface Activities {
+  id: number;
+  title: string;
+  descriptions: string;
+  link: string;
+  image: string;
+}
+
+interface Examples {
+  id: number;
+  title: string;
+  descriptions: string;
+  link: string;
+  image: string;
+}
+
 @Component({
   selector: 'app-main',
   imports: [CommonModule, RouterLink],
@@ -39,77 +62,27 @@ import { RouterLink } from '@angular/router';
     </section>
 
     <section class="grid grid-cols-2 gap-4 py-16  m-auto max-w-7xl">
-      <div class="">
-        <a routerLink="uten" class="cursor-pointer group">
-          <div class="overflow-hidden">
-            <img
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-              alt=""
-              src="/uten.jpg"
-            />
-          </div>
-          <div class="mt-1">
-            <h3 class="text-center group-hover:text-red-600">Uten.Silo RE</h3>
-            <p class="text-center text-gray-500 group-hover:text-red-600">
-              Keeping things tidy - now entirely from recycled materials.
-            </p>
-          </div>
-        </a>
-      </div>
-      <div class="">
-        <a routerLink="uten" class="cursor-pointer group">
-          <div class="overflow-hidden">
-            <img
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-              alt=""
-              src="/tipton.jpg"
-            />
-          </div>
-
-          <div class="mt-1">
-            <h3 class="text-center group-hover:text-red-600">Tip Ton RE</h3>
-            <p class="text-center text-gray-500 group-hover:text-red-600">
-              The chair that can't sit still - in four new colors
-            </p>
-          </div>
-        </a>
-      </div>
-      <div class="">
-        <a routerLink="uten" class="cursor-pointer group">
-          <div class="overflow-hidden">
-            <img
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-              alt=""
-              src="/outdoor.jpg"
-            />
-          </div>
-          <div class="mt-1">
-            <h3 class="text-center group-hover:text-red-600">
-              Outdoor Collection
-            </h3>
-            <p class="text-center text-gray-500 group-hover:text-red-600">
-              Step outside and make the most of the season.
-            </p>
-          </div>
-        </a>
-      </div>
-      <div class="">
-        <a routerLink="uten" class="cursor-pointer group">
-          <div class="overflow-hidden">
-            <img
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-              alt=""
-              src="/vitracampus.jpg"
-            />
-          </div>
-          <div class="mt-1">
-            <h3 class="text-center group-hover:text-red-600">Vitra Campus</h3>
-            <p class="text-center text-gray-500 group-hover:text-red-600">
-              Plan your visit
-            </p>
-          </div>
-        </a>
-      </div>
+      @for (activity of activities; track activity.id) {
+        <div class="">
+          <a routerLink="uten" class="cursor-pointer group">
+            <div class="overflow-hidden">
+              <img
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                alt=""
+                [src]="activity.image"
+              />
+            </div>
+            <div class="mt-1">
+              <h3 class="text-center group-hover:text-red-600">
+                {{ activity.title }}
+              </h3>
+              <p class="text-center text-gray-500 group-hover:text-red-600">
+                {{ activity.descriptions }}
+              </p>
+            </div>
+          </a>
+        </div>
+      }
     </section>
 
     <section
@@ -156,41 +129,25 @@ import { RouterLink } from '@angular/router';
 
     <section class="m-auto max-w-7xl pb-12">
       <div class="grid grid-cols-2 gap-4 mt-20">
-        <a routerLink="/workplace" class=" group ">
-          <div class="overflow-hidden">
-            <img
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-              alt=""
-              src="/workplace.jpg"
-            />
-          </div>
-          <div class="mt-1">
-            <h3 class="text-center group-hover:text-red-600">
-              Inspiring and flexible workspaces
-            </h3>
-            <p class="text-center text-gray-500 group-hover:text-red-600">
-              Collaborate with us - Consulting & Planning Studio
-            </p>
-          </div>
-        </a>
-
-        <a routerLink="/clients" class=" group">
-          <div class="overflow-hidden">
-            <img
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-              alt=""
-              src="/ourclients.jpg"
-            />
-          </div>
-          <div class="mt-1">
-            <h3 class="text-center group-hover:text-red-600">
-              No matter which industry and no matter where in the world
-            </h3>
-            <p class="text-center text-gray-500 group-hover:text-red-600">
-              Our Clients
-            </p>
-          </div>
-        </a>
+        @for (example of examples; track example.id) {
+          <a [routerLink]="example.link" class=" group ">
+            <div class="overflow-hidden">
+              <img
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                alt=""
+                [src]="example.image"
+              />
+            </div>
+            <div class="mt-1">
+              <h3 class="text-center group-hover:text-red-600">
+                {{ example.title }}
+              </h3>
+              <p class="text-center text-gray-500 group-hover:text-red-600">
+                {{ example.descriptions }}
+              </p>
+            </div>
+          </a>
+        }
       </div>
     </section>
 
@@ -296,7 +253,7 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainComponent {
-  categories = [
+  categories: Categories[] = [
     {
       id: 1,
       item: 'Chairs',
@@ -380,6 +337,55 @@ export class MainComponent {
       item: 'Airport seating',
       image: '/categories.jpg',
       link: 'categories/airport',
+    },
+  ];
+
+  activities: Activities[] = [
+    {
+      id: 1,
+      title: 'Uten.Silo RE',
+      descriptions:
+        'Keeping things tidy - now entirely from recycled materials',
+      link: '/uten',
+      image: '/uten.jpg',
+    },
+    {
+      id: 2,
+      title: 'Tip Ton RE',
+      descriptions: "The chair that can't sit still - in four new colours",
+      link: '/tip-ton',
+      image: '/tip-ton.jpg',
+    },
+    {
+      id: 3,
+      title: 'Outdoor Collection',
+      descriptions: 'Step outside and make the most of the season',
+      link: '/outdoor',
+      image: '/outdoor.jpg',
+    },
+    {
+      id: 4,
+      title: 'Vitra Campus',
+      descriptions: 'Plan your visit',
+      link: '/campus',
+      image: '/vitra-campus.jpg',
+    },
+  ];
+
+  examples: Examples[] = [
+    {
+      id: 1,
+      title: 'Inspiring and flexible workspaces',
+      descriptions: 'Collaborate with us - Consulting & Planning Studio',
+      link: '/workspaces',
+      image: '/workplace.jpg',
+    },
+    {
+      id: 2,
+      title: 'No matter which industry and no matter where in the world',
+      descriptions: 'Our Clients',
+      link: '/clients',
+      image: '/our-clients.jpg',
     },
   ];
 }
