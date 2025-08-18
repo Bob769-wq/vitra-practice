@@ -10,11 +10,81 @@ interface AboutVitraItem {
   link: string;
 }
 
+interface DiscoverList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface VisitorList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface MagazineList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface VitraCampusImg {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+}
+
+interface HighlightImg {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+}
+
+interface ProfessionalPic {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
+}
+
+interface ServiceList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface DownloadList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface ToolList {
+  id: number;
+  title: string;
+  link: string;
+}
+
 interface NavList {
   id: number;
   title: string;
   link: string;
   dropDown?: boolean;
+}
+
+interface InspirationsList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface ServiceImg {
+  id: number;
+  title: string;
+  image: string;
+  link: string;
 }
 
 @Component({
@@ -45,7 +115,6 @@ interface NavList {
                     (mouseenter)="
                       item.dropDown ? setActiveDropdown(item.id) : null
                     "
-                    (mouseleave)="setActiveDropdown(null)"
                   >
                     {{ item.title }}
                   </a>
@@ -114,76 +183,461 @@ interface NavList {
         </div>
       </header>
 
-      <!-- 移到整個 header 外面的 dropdown -->
       @if (activeDropdown()) {
         <div
           class="absolute top-full left-0 right-0 w-full z-40 bg-white border-t"
           (mouseenter)="setActiveDropdown(activeDropdown()!)"
           (mouseleave)="setActiveDropdown(null)"
         >
-          <div class="max-w-7xl mx-auto px-16 py-8">
+          <div class="max-w-7xl mx-auto py-8">
             @switch (activeDropdown()) {
               @case (1) {
-                <!-- Products 的版面 -->
-                <h3 class="text-gray-400 mb-2">Discover Products</h3>
-                <div class="grid grid-cols-4 gap-6">
-                  <div class="text-center">
-                    <p>Chairs</p>
+                <div class="grid grid-cols-6 gap-6">
+                  <div>
+                    <h3 class="text-gray-400">Seating furniture</h3>
+                    <ul class="mb-8">
+                      @for (item of seatingFurnitureItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                    <h3 class="text-gray-400">Spatial organisation</h3>
+                    <ul>
+                      @for (item of spatialItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
                   </div>
-                  <div class="text-center">
-                    <p>Tables</p>
+                  <div>
+                    <h3 class="text-gray-400">Tables</h3>
+                    <ul class="mb-8">
+                      @for (item of TablesItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                    <h3 class="text-gray-400">Accessories</h3>
+                    <ul>
+                      @for (item of accessoriesItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                      <li
+                        class="text-base pt-1 hover:text-red-600 text-gray-400"
+                      >
+                        <a class="border-b border-b-gray-400">More</a>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="text-center">
-                    <p>Storage</p>
+                  <div>
+                    <h3 class="text-gray-400">Discover</h3>
+                    <ul class="mb-8">
+                      @for (item of productDiscoverItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                    <h3 class="text-gray-400">Designer</h3>
+                    <ul>
+                      @for (item of designerItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                      <li
+                        class="text-base pt-1 hover:text-red-600 text-gray-400"
+                      >
+                        <a class="border-b border-b-gray-400">More</a>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="text-center">
-                    <p>Lighting</p>
+                  <div>
+                    <h3 class="text-gray-400">Product finder</h3>
+                    <ul class="mb-8">
+                      @for (item of finderItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                    <h3 class="text-gray-400">Service</h3>
+                    <ul class="mb-8">
+                      @for (item of serviceItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                    <h3 class="text-gray-400">Circular products</h3>
+                    <ul>
+                      @for (item of circularItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="col-span-2 flex flex-col gap-4">
+                    @for (item of productImage; track item.id) {
+                      <div class="relative overflow-hidden group">
+                        <a [routerLink]="item.link">
+                          <img
+                            class="w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            [alt]="item.title"
+                            [src]="item.image"
+                          />
+                        </a>
+                        <div class="absolute inset-0 flex items-end p-3">
+                          <h3 class="text-white text-lg">
+                            {{ item.title }}
+                          </h3>
+                        </div>
+                      </div>
+                    }
                   </div>
                 </div>
               }
               @case (2) {
-                <!-- Inspirations 的版面 -->
-                <h3 class="text-gray-400 mb-2">Discover Inspirations</h3>
-                <div class="flex gap-8">
-                  <div class="flex-1">
-                    <p>Home Stories</p>
+                <div class="grid grid-cols-6 gap-8">
+                  <div class="col-span-3">
+                    <div class="grid grid-cols-3 gap-8">
+                      <div>
+                        <h3 class="text-gray-400">Home</h3>
+                        <ul>
+                          @for (item of homeItems; track item.id) {
+                            <li class="text-lg pt-1 hover:text-red-600">
+                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 class="text-gray-400">Office spaces</h3>
+                        <ul>
+                          @for (item of officeItems; track item.id) {
+                            <li class="text-lg pt-1 hover:text-red-600">
+                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            </li>
+                          }
+                          <li
+                            class="text-base pt-1 hover:text-red-600 text-gray-400"
+                          >
+                            <a class="border-b border-b-gray-400">More</a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 class="text-gray-400">Public spaces</h3>
+                        <ul>
+                          @for (item of publicItems; track item.id) {
+                            <li class="text-lg pt-1 hover:text-red-600">
+                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 class="text-gray-400">Discover</h3>
+                        <ul>
+                          @for (item of homeStoriesItems; track item.id) {
+                            <li class="text-lg pt-1 hover:text-red-600">
+                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 class="text-gray-400">Vitra offices & concepts</h3>
+                        <ul>
+                          @for (item of vitraItems; track item.id) {
+                            <li class="text-lg pt-1 hover:text-red-600">
+                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            </li>
+                          }
+                          <li
+                            class="text-base pt-1 hover:text-red-600 text-gray-400"
+                          >
+                            <a class="border-b border-b-gray-400">More</a>
+                          </li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 class="text-gray-400">Themes</h3>
+                        <ul>
+                          @for (item of themesItems; track item.id) {
+                            <li class="text-lg pt-1 hover:text-red-600">
+                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="flex-1">
-                    <p>Office Stories</p>
+                  <div class="col-span-3">
+                    <div class="flex justify-between items-start">
+                      <h3 class="text-gray-400">Discover</h3>
+                      <div class="text-gray-200">
+                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
+                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                      </div>
+                    </div>
+                    <div class="overflow-x-auto scrollbar-hide">
+                      <div class="flex gap-6 w-max">
+                        @for (item of inspirationsImage; track item.id) {
+                          <a routerLink="item.link">
+                            <div
+                              class="relative flex-shrink-0 w-64 overflow-hidden group"
+                            >
+                              <img
+                                [src]="item.image"
+                                [alt]="item.title"
+                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                              />
+                              <div class="absolute inset-0 flex items-end p-3">
+                                <h3 class="text-white text-lg">
+                                  {{ item.title }}
+                                </h3>
+                              </div>
+                            </div>
+                          </a>
+                        }
+                      </div>
+                    </div>
                   </div>
                 </div>
               }
               @case (3) {
-                <!-- Services 的版面 -->
-                <h3 class="text-gray-400 mb-2">Discover Services</h3>
-                <p>Consulting, Planning & Design Support</p>
-              }
-              @case (4) {
-                <!-- Professionals 的版面 -->
-                <h3 class="text-gray-400 mb-2">For Professionals</h3>
-                <p>Architect & Designer Resources</p>
-              }
-              @case (5) {
-                <!-- Magazine 的版面 -->
-                <h3 class="text-gray-400 mb-2">Vitra Magazine</h3>
-                <p>Design Stories & Insights</p>
-              }
-              @case (6) {
-                <!-- Vitra Campus 的版面 -->
-                <h3 class="text-gray-400 mb-2">Vitra Campus</h3>
-                <p>Architecture, Exhibitions & Events</p>
-              }
-              @case (7) {
-                <!-- About Vitra 的版面 (保持原本的圖片版面) -->
-                <h3 class="text-gray-400 mb-2">Discover About Vitra</h3>
-                <div class="flex gap-6 justify-center">
-                  @for (item of aboutVitraItems; track item.id) {
-                    <a [routerLink]="item.link">
-                      <div class="w-60 relative">
+                <div class="grid grid-cols-5 gap-6">
+                  <div>
+                    <h3 class="text-gray-400">Product services</h3>
+                    <ul>
+                      @for (item of productServicesItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 class="text-gray-400">Office planning</h3>
+                    <ul class="mb-9">
+                      <li class="text-lg pt-1 hover:text-red-600">
+                        <a routerLink="/studio">Consulting & Planning Studio</a>
+                      </li>
+                    </ul>
+                    <h3 class="text-gray-400">Circular Products</h3>
+                    <ul>
+                      <li class="text-lg pt-1 hover:text-red-600">
+                        <a routerLink="/circle-stores">Vitra Circle Stores</a>
+                      </li>
+                    </ul>
+                  </div>
+                  @for (item of productImg; track item.id) {
+                    <a routerLink="item.link">
+                      <div class="relative overflow-hidden group">
                         <img
                           [src]="item.image"
                           [alt]="item.title"
-                          class="w-full object-cover aspect-[5/7]"
+                          class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                        />
+                        <div class="absolute inset-0 flex items-end p-3">
+                          <h3 class="text-white text-lg">
+                            {{ item.title }}
+                          </h3>
+                        </div>
+                      </div>
+                    </a>
+                  }
+                </div>
+              }
+              @case (4) {
+                <div class="grid grid-cols-5 gap-6">
+                  <div>
+                    <h3 class="text-gray-400">Downloads</h3>
+                    <ul>
+                      @for (item of downloadItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 class="text-gray-400">Tools</h3>
+                    <ul class="mb-8">
+                      @for (item of toolItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                    <h3 class="text-gray-400">Dealer</h3>
+                    <ul>
+                      <li class="text-lg pt-1 hover:text-red-600">
+                        <a routerLink="/login">To the dealer login</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-span-3">
+                    <div class="flex justify-between items-start">
+                      <h3 class="text-gray-400">Discover</h3>
+                      <div class="text-gray-200">
+                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
+                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                      </div>
+                    </div>
+                    <div class="overflow-x-auto scrollbar-hide">
+                      <div class="flex gap-6 w-max">
+                        @for (item of professionalImage; track item.id) {
+                          <a routerLink="item.link">
+                            <div
+                              class="relative flex-shrink-0 w-64 overflow-hidden group"
+                            >
+                              <img
+                                [src]="item.image"
+                                [alt]="item.title"
+                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                              />
+                              <div class="absolute inset-0 flex items-end p-3">
+                                <h3 class="text-white text-lg">
+                                  {{ item.title }}
+                                </h3>
+                              </div>
+                            </div>
+                          </a>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              @case (5) {
+                <div class="grid grid-cols-5 gap-6">
+                  <div>
+                    <h3 class="text-gray-400">Categories</h3>
+                    <ul>
+                      @for (item of magazineItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                      <li
+                        class="text-base pt-1 hover:text-red-600 text-gray-400"
+                      >
+                        <a class="border-b border-b-gray-400">More</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-span-4">
+                    <div class="flex justify-between items-start">
+                      <h3 class="text-gray-400">Article</h3>
+                      <div class="text-gray-200">
+                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
+                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                      </div>
+                    </div>
+                    <div class="overflow-x-auto scrollbar-hide">
+                      <div class="flex gap-6 w-max">
+                        @for (item of magazineImage; track item.id) {
+                          <a routerLink="item.link">
+                            <div
+                              class="relative flex-shrink-0 w-64 overflow-hidden group"
+                            >
+                              <img
+                                [src]="item.image"
+                                [alt]="item.title"
+                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                              />
+                              <div class="absolute inset-0 flex items-end p-3">
+                                <h3 class="text-white text-lg">
+                                  {{ item.title }}
+                                </h3>
+                              </div>
+                            </div>
+                          </a>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              @case (6) {
+                <div class="grid grid-cols-5 gap-6">
+                  <div>
+                    <h3 class="text-gray-400">Discover</h3>
+                    <ul>
+                      @for (item of discoverItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 class="text-gray-400">Visitor information</h3>
+                    <ul>
+                      @for (item of visitorItems; track item.id) {
+                        <li class="text-lg pt-1 hover:text-red-600">
+                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                  <div class="col-span-3">
+                    <div class="flex justify-between items-start">
+                      <h3 class="text-gray-400">Highlights</h3>
+                      <div class="text-gray-200">
+                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
+                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                      </div>
+                    </div>
+                    <div class="overflow-x-auto scrollbar-hide">
+                      <div class="flex gap-6 w-max">
+                        @for (item of campusImg; track item.id) {
+                          <a routerLink="item.link">
+                            <div
+                              class="relative flex-shrink-0 w-64 overflow-hidden group"
+                            >
+                              <img
+                                [src]="item.image"
+                                [alt]="item.title"
+                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                              />
+                              <div class="absolute inset-0 flex items-end p-3">
+                                <h3 class="text-white text-lg">
+                                  {{ item.title }}
+                                </h3>
+                              </div>
+                            </div>
+                          </a>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              @case (7) {
+                <div class="flex justify-between items-start">
+                  <h3 class="text-gray-400">Discover About Vitra</h3>
+                  <div class="text-gray-200">
+                    <mat-icon class="text-base">arrow_back_ios</mat-icon>
+                    <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                  </div>
+                </div>
+                <div class="grid grid-cols-5 gap-6">
+                  @for (item of aboutVitraItems; track item.id) {
+                    <a [routerLink]="item.link">
+                      <div class="relative overflow-hidden group">
+                        <img
+                          [src]="item.image"
+                          [alt]="item.title"
+                          class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
                         />
                         <div class="absolute inset-0 flex items-end p-3">
                           <h3 class="text-white text-lg">
@@ -211,6 +665,210 @@ export class HeaderComponent {
     this.activeDropdown.set(id);
   }
 
+  campusImg: VitraCampusImg[] = [
+    {
+      id: 1,
+      title: 'VitraHaus',
+      image: '/categories.jpg',
+      link: '/vitrahaus',
+    },
+    {
+      id: 2,
+      title: 'Vitra Design Museum',
+      image: '/categories.jpg',
+      link: '/museum',
+    },
+    {
+      id: 3,
+      title: 'Vitra Schaudepot',
+      image: '/categories.jpg',
+      link: '/schaudepot',
+    },
+    {
+      id: 4,
+      title: 'Vitra Circle Store Campus',
+      image: '/categories.jpg',
+      link: '/circle-store',
+    },
+    {
+      id: 5,
+      title: 'Oudolf Garten',
+      image: '/categories.jpg',
+      link: '/garten',
+    },
+  ];
+  magazineImage: HighlightImg[] = [
+    {
+      id: 1,
+      title: 'Project Vitra',
+      image: '/categories.jpg',
+      link: '/project',
+    },
+    {
+      id: 2,
+      title: 'Mynt is a lifetime achievement to me',
+      image: '/categories.jpg',
+      link: '/mynt',
+    },
+    {
+      id: 3,
+      title: 'A desk like a typeface',
+      image: '/categories.jpg',
+      link: '/desk',
+    },
+    {
+      id: 4,
+      title: 'V-Foam',
+      image: '/categories.jpg',
+      link: '/foam',
+    },
+    {
+      id: 5,
+      title: 'Sculptural Icons',
+      image: '/categories.jpg',
+      link: '/sculptural',
+    },
+    {
+      id: 6,
+      title: 'Games bring people together - just like good offices',
+      image: '/categories.jpg',
+      link: '/games',
+    },
+    {
+      id: 7,
+      title: 'Let there be light!',
+      image: '/categories.jpg',
+      link: '/light',
+    },
+    {
+      id: 8,
+      title: 'Social Seating',
+      image: '/categories.jpg',
+      link: '/social-seating',
+    },
+    {
+      id: 9,
+      title: 'Just Do It!',
+      image: '/categories.jpg',
+      link: '/just-do-it',
+    },
+    {
+      id: 10,
+      title: 'EVER GREEN',
+      image: '/categories.jpg',
+      link: '/evergreen',
+    },
+    {
+      id: 11,
+      title: 'Why the Eames La Fonda Chair was designed',
+      image: '/categories.jpg',
+      link: '/chair-designed',
+    },
+    {
+      id: 12,
+      title: 'When a Sofa is more than just a Sofa: Anagram',
+      image: '/categories.jpg',
+      link: '/sofa-anagram',
+    },
+    {
+      id: 13,
+      title: '100% virgin wool - 100% recyclable',
+      image: '/categories.jpg',
+      link: '/wool',
+    },
+    {
+      id: 14,
+      title: 'An archive is like a time capsule',
+      image: '/categories.jpg',
+      link: '/capsule',
+    },
+    {
+      id: 15,
+      title: 'VitraHaus Loft - A conversation with Sabine Marcelis',
+      image: '/categories.jpg',
+      link: '/loft',
+    },
+    {
+      id: 16,
+      title: 'A 1000 m2 piece of furniture',
+      image: '/categories.jpg',
+      link: '/m2-furniture',
+    },
+    {
+      id: 17,
+      title: 'From a toy to an object',
+      image: '/categories.jpg',
+      link: '/toy-object',
+    },
+    {
+      id: 18,
+      title: 'The Eames Collection at the Vitra Design Museum',
+      image: '/categories.jpg',
+      link: '/collection',
+    },
+    {
+      id: 19,
+      title: 'About the partnership between Eames and Vitra',
+      image: '/categories.jpg',
+      link: '/partnership',
+    },
+  ];
+  professionalImage: ProfessionalPic[] = [
+    {
+      id: 1,
+      title: 'Our Clients',
+      image: '/categories.jpg',
+      link: '/clients',
+    },
+    {
+      id: 2,
+      title: 'Mynt',
+      image: '/categories.jpg',
+      link: '/mynt',
+    },
+    {
+      id: 3,
+      title: 'Destination Workplace: Visit our clients and partners',
+      image: '/categories.jpg',
+      link: '/destination',
+    },
+    {
+      id: 4,
+      title: 'Anagram Sofa',
+      image: '/categories.jpg',
+      link: '/anagram-sofa',
+    },
+    {
+      id: 5,
+      title: 'Mikado',
+      image: '/categories.jpg',
+      link: '/mikado',
+    },
+    {
+      id: 6,
+      title: 'Tyde 2 on castors',
+      image: '/categories.jpg',
+      link: '/tyde',
+    },
+    {
+      id: 7,
+      title: 'ACX',
+      image: '/categories.jpg',
+      link: '/acx',
+    },
+    {
+      id: 8,
+      title: 'Dancing Office',
+      image: '/categories.jpg',
+      link: '/dancing-office',
+    },
+    {
+      id: 9,
+      title: 'Office chairs',
+      image: '/categories.jpg',
+      link: '/office-chairs',
+    },
+  ];
   aboutVitraItems: AboutVitraItem[] = [
     {
       id: 1,
@@ -228,7 +886,7 @@ export class HeaderComponent {
       id: 3,
       title: 'Design process',
       image: '/categories.jpg',
-      link: '/about/designprocess',
+      link: '/about/design-process',
     },
     {
       id: 4,
@@ -241,6 +899,635 @@ export class HeaderComponent {
       title: 'History - Project Vitra',
       image: '/categories.jpg',
       link: '/about/history',
+    },
+  ];
+  discoverItems: DiscoverList[] = [
+    {
+      id: 1,
+      title: 'Exhibitions',
+      link: '/exhibitions',
+    },
+    {
+      id: 2,
+      title: 'Guided tours & workshops',
+      link: '/guided-tours',
+    },
+    {
+      id: 3,
+      title: 'Food and drink',
+      link: '/food',
+    },
+    {
+      id: 4,
+      title: 'Shopping',
+      link: '/shopping',
+    },
+    {
+      id: 5,
+      title: 'Activities for families',
+      link: '/activities',
+    },
+    {
+      id: 6,
+      title: 'Architecture',
+      link: '/architecture',
+    },
+    {
+      id: 7,
+      title: 'Your event',
+      link: '/event',
+    },
+    {
+      id: 8,
+      title: 'Consulting & planning in the VitraHaus',
+      link: '/consulting',
+    },
+  ];
+  visitorItems: VisitorList[] = [
+    {
+      id: 1,
+      title: 'Plan your visit',
+      link: '/plan',
+    },
+    {
+      id: 2,
+      title: 'Vitra Campus app',
+      link: '/campus-app',
+    },
+    {
+      id: 3,
+      title: 'Campus Events',
+      link: '/campus-events',
+    },
+    {
+      id: 4,
+      title: 'News',
+      link: '/news',
+    },
+  ];
+  magazineItems: MagazineList[] = [
+    {
+      id: 1,
+      title: 'Stories',
+      link: '/stories',
+    },
+    {
+      id: 2,
+      title: 'Conversations',
+      link: '/conversations',
+    },
+    {
+      id: 3,
+      title: 'Exhibitions',
+      link: '/exhibitions',
+    },
+    {
+      id: 4,
+      title: 'Designer',
+      link: '/designer',
+    },
+  ];
+  downloadItems: DownloadList[] = [
+    {
+      id: 1,
+      title: 'CAD data',
+      link: '/cad',
+    },
+    {
+      id: 2,
+      title: 'Product factsheets',
+      link: '/factsheets',
+    },
+    {
+      id: 3,
+      title: 'Certificates',
+      link: '/certificates',
+    },
+    {
+      id: 4,
+      title: 'Sustainability report',
+      link: '/sustain-report',
+    },
+    {
+      id: 5,
+      title: 'Instructions',
+      link: '/instructions',
+    },
+    {
+      id: 6,
+      title: 'Ecology information',
+      link: '/ecology',
+    },
+  ];
+  productServicesItems: ServiceList[] = [
+    {
+      id: 1,
+      title: 'Care & repair',
+      link: '/care',
+    },
+    {
+      id: 2,
+      title: 'Care products',
+      link: '/care-products',
+    },
+    {
+      id: 3,
+      title: 'Manufacturer warranty',
+      link: '/warranty',
+    },
+    {
+      id: 4,
+      title: 'FAQ and contact',
+      link: '/faq',
+    },
+    {
+      id: 5,
+      title: 'Instructions',
+      link: '/instructions',
+    },
+  ];
+  productImg: ServiceImg[] = [
+    {
+      id: 1,
+      title: 'Consulting & planning in the VitraHaus',
+      image: '/categories.jpg',
+      link: '/consulting',
+    },
+    {
+      id: 2,
+      title: 'Instructions',
+      image: '/categories.jpg',
+      link: '/instructions',
+    },
+    {
+      id: 3,
+      title: 'Outdoor care instructions',
+      image: '/categories.jpg',
+      link: '/outdoor',
+    },
+  ];
+  toolItems: ToolList[] = [
+    {
+      id: 1,
+      title: 'pCon',
+      link: '/pcon',
+    },
+    {
+      id: 2,
+      title: 'Planning Examples',
+      link: '/planning',
+    },
+    {
+      id: 3,
+      title: 'Colour & Material Library',
+      link: '/library',
+    },
+    {
+      id: 4,
+      title: 'Certificates and standards',
+      link: '/certificates-standards',
+    },
+    {
+      id: 5,
+      title: 'Home Selection',
+      link: '/home-selection',
+    },
+  ];
+  homeItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Living room',
+      link: '/living-room',
+    },
+    {
+      id: 2,
+      title: 'Dining room',
+      link: '/dining-room',
+    },
+    {
+      id: 3,
+      title: 'Home Office',
+      link: '/home-office',
+    },
+    {
+      id: 4,
+      title: "Children's room",
+      link: '/children',
+    },
+    {
+      id: 5,
+      title: 'Outdoor',
+      link: '/outdoor',
+    },
+  ];
+  homeStoriesItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Home Stories',
+      link: '/home-stories',
+    },
+    {
+      id: 2,
+      title: 'Augumented Reality',
+      link: '/augmented-reality',
+    },
+    {
+      id: 3,
+      title: 'Colours & materials',
+      link: '/colours',
+    },
+    {
+      id: 4,
+      title: 'Home Selection',
+      link: '/selection',
+    },
+  ];
+  officeItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Workspace',
+      link: '/workspace',
+    },
+    {
+      id: 2,
+      title: 'Focus',
+      link: '/focus',
+    },
+    {
+      id: 3,
+      title: 'Meeting',
+      link: '/meeting',
+    },
+    {
+      id: 4,
+      title: 'Workshop',
+      link: '/workshop',
+    },
+  ];
+  vitraItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Club Office',
+      link: '/club-office',
+    },
+    {
+      id: 2,
+      title: 'Citizen Office',
+      link: '/citizen',
+    },
+    {
+      id: 3,
+      title: 'Studio Office',
+      link: '/studio',
+    },
+    {
+      id: 4,
+      title: 'Dynamic Spaces',
+      link: '/dynamic',
+    },
+  ];
+  publicItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Hospitality',
+      link: '/hospitality',
+    },
+    {
+      id: 2,
+      title: 'Airports',
+      link: '/airports',
+    },
+    {
+      id: 3,
+      title: 'Education',
+      link: '/education',
+    },
+    {
+      id: 4,
+      title: 'Co-working',
+      link: '/co-working',
+    },
+    {
+      id: 5,
+      title: 'Healthcare',
+      link: '/healthcare',
+    },
+  ];
+  themesItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Our Clients',
+      link: '/clients',
+    },
+    {
+      id: 2,
+      title: 'Destination Workplace',
+      link: '/destination',
+    },
+    {
+      id: 3,
+      title: 'A case for classics',
+      link: '/classics',
+    },
+    {
+      id: 4,
+      title: 'Office chairs',
+      link: '/office-chairs',
+    },
+    {
+      id: 5,
+      title: 'Dancing Office',
+      link: '/dancing-office',
+    },
+  ];
+  inspirationsImage: ServiceImg[] = [
+    {
+      id: 1,
+      title: 'Home Stories',
+      image: '/categories.jpg',
+      link: '/home-stories',
+    },
+    {
+      id: 2,
+      title: 'The Home Selection fabrics from Kvadrat and Dedar',
+      image: '/categories.jpg',
+      link: '/selection',
+    },
+    {
+      id: 3,
+      title: 'Augmented Reality - bring Vitra products into your home',
+      image: '/categories.jpg',
+      link: '/augmented-reality',
+    },
+    {
+      id: 4,
+      title: 'School of Design: Showcase work and knowledge',
+      image: '/categories.jpg',
+      link: '/school-design',
+    },
+    {
+      id: 5,
+      title: 'A case for classics',
+      image: '/categories.jpg',
+      link: '/classics',
+    },
+    {
+      id: 6,
+      title: 'Colour & material',
+      image: '/categories.jpg',
+      link: '/colour-material',
+    },
+    {
+      id: 7,
+      title: 'An open house',
+      image: '/categories.jpg',
+      link: '/open-house',
+    },
+    {
+      id: 8,
+      title: 'An office landscape - without walls or partitions',
+      image: '/categories.jpg',
+      link: '/office-landscape',
+    },
+    {
+      id: 9,
+      title: 'High comfort of low energy',
+      image: '/categories.jpg',
+      link: '/comfort',
+    },
+    {
+      id: 10,
+      title: 'A leading space for a leading art college',
+      image: '/categories.jpg',
+      link: '/garten',
+    },
+  ];
+  seatingFurnitureItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Chairs',
+      link: '/chairs',
+    },
+    {
+      id: 2,
+      title: 'Lounge chairs',
+      link: '/lounge-chairs',
+    },
+    {
+      id: 3,
+      title: 'Sofas',
+      link: '/sofas',
+    },
+    {
+      id: 4,
+      title: 'Office chairs',
+      link: '/office-chairs',
+    },
+    {
+      id: 5,
+      title: 'Chaises longues',
+      link: '/chaises',
+    },
+    {
+      id: 6,
+      title: 'Stools & benches',
+      link: '/stools-benches',
+    },
+    {
+      id: 7,
+      title: 'Sculptures',
+      link: '/sculptures',
+    },
+    {
+      id: 8,
+      title: 'Conference chairs',
+      link: '/conference',
+    },
+    {
+      id: 9,
+      title: 'Airport seating',
+      link: '/airport',
+    },
+  ];
+  spatialItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Storage space',
+      link: '/storage-space',
+    },
+    {
+      id: 2,
+      title: 'Micro architecture',
+      link: '/micro',
+    },
+  ];
+  TablesItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Dining tables',
+      link: '/dining-tables',
+    },
+    {
+      id: 2,
+      title: 'Café tables',
+      link: '/café',
+    },
+    {
+      id: 3,
+      title: 'Coffee & side tables',
+      link: '/coffee-side',
+    },
+    {
+      id: 4,
+      title: 'Desks',
+      link: '/desks',
+    },
+    {
+      id: 5,
+      title: 'Office furniture systems',
+      link: '/office-systems',
+    },
+    {
+      id: 6,
+      title: 'Conference systems',
+      link: '/conference-systems',
+    },
+  ];
+  accessoriesItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Lighting',
+      link: '/lighting',
+    },
+    {
+      id: 2,
+      title: 'Clocks',
+      link: '/clocks',
+    },
+    {
+      id: 3,
+      title: 'Decorative objects',
+      link: '/decorative-objects',
+    },
+    {
+      id: 4,
+      title: 'Coat racks & wall shelves',
+      link: '/racks-shelves',
+    },
+    {
+      id: 5,
+      title: 'Trays & vessels',
+      link: '/trays-vessels',
+    },
+  ];
+  productDiscoverItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'New',
+      link: '/new',
+    },
+    {
+      id: 2,
+      title: 'Bestseller',
+      link: '/bestseller',
+    },
+    {
+      id: 3,
+      title: 'Colour & material',
+      link: '/colour-material',
+    },
+  ];
+  designerItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Alexander Girard',
+      link: '/alexander',
+    },
+    {
+      id: 2,
+      title: 'Antonio Citterio',
+      link: '/antonio',
+    },
+    {
+      id: 3,
+      title: 'Barber Osgerby',
+      link: '/barber',
+    },
+    {
+      id: 4,
+      title: 'Charles & Ray Eames',
+      link: '/charles',
+    },
+    {
+      id: 5,
+      title: 'George Nelson',
+      link: '/george',
+    },
+    {
+      id: 6,
+      title: 'Hella Jongerius',
+      link: '/hella',
+    },
+    {
+      id: 7,
+      title: 'Isamu Noguchi',
+      link: '/isamu',
+    },
+  ];
+  finderItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Lounge chair finder',
+      link: '/lounge-chair-finder',
+    },
+    {
+      id: 2,
+      title: 'Office chair finder',
+      link: '/office-chair-finder',
+    },
+    {
+      id: 3,
+      title: 'Gift finder',
+      link: '/gift-finder',
+    },
+  ];
+  serviceItems: InspirationsList[] = [
+    {
+      id: 1,
+      title: 'Care & repair',
+      link: '/care-repair',
+    },
+    {
+      id: 2,
+      title: 'Spare parts',
+      link: '/spare-parts',
+    },
+    {
+      id: 3,
+      title: 'Care products',
+      link: '/care-products',
+    },
+    {
+      id: 4,
+      title: 'Manufacturer warranty',
+      link: '/warranty',
+    },
+  ];
+  circularItems: InspirationsList[] = [
+    { id: 1, title: 'Vitra Circle Stores', link: '/vitra-circle' },
+  ];
+  productImage: ServiceImg[] = [
+    {
+      id: 1,
+      title: 'Mynt: sit differently',
+      link: '/mynt',
+      image: '/categories.jpg',
+    },
+    {
+      id: 2,
+      title: 'Antony Limited Edition 2025',
+      link: '/antony-limited-edition',
+      image: '/categories.jpg',
     },
   ];
 

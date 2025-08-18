@@ -113,7 +113,7 @@ interface Examples {
                 <img
                   [src]="category.image"
                   [alt]="category.item"
-                  class="w-full  object-cover aspect-[5/8]"
+                  class="w-full object-cover aspect-[5/8]"
                 />
                 <div class="absolute inset-0 flex items-end p-6">
                   <h3 class="text-white text-xl font-medium">
