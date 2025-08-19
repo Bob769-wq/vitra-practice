@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
+// TODO: can combine these interfaces into a single one if they share common properties
+
 interface AboutVitraItem {
   id: number;
   title: string;
@@ -109,6 +111,7 @@ interface ServiceImg {
             <ul class="flex gap-6">
               @for (item of NavList; track item.id) {
                 <li>
+<!--                  routerlink routerlinkAcitve routerlinkActivaOptions-->
                   <a
                     [routerLink]="item.link"
                     class="hover:text-red-600"
@@ -191,12 +194,16 @@ interface ServiceImg {
         >
           <div class="max-w-7xl mx-auto py-8">
             @switch (activeDropdown()) {
+<!--              TODO: these should not use id-->
               @case (1) {
                 <div class="grid grid-cols-6 gap-6">
                   <div>
                     <h3 class="text-gray-400">Seating furniture</h3>
+<!--                    TODO: use margin top instead margin bottom-->
                     <ul class="mb-8">
                       @for (item of seatingFurnitureItems; track item.id) {
+<!--                        TODO: hover should have cursor-pointer indicator-->
+<!--                        TODO: if is the space between items, use gap is better then padding top-->
                         <li class="text-lg pt-1 hover:text-red-600">
                           <a [routerLink]="item.link">{{ item.title }}</a>
                         </li>
@@ -285,6 +292,7 @@ interface ServiceImg {
                   </div>
                   <div class="col-span-2 flex flex-col gap-4">
                     @for (item of productImage; track item.id) {
+<!--                      TODO: why here need to use group-->
                       <div class="relative overflow-hidden group">
                         <a [routerLink]="item.link">
                           <img

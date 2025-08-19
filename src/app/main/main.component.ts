@@ -66,6 +66,7 @@ interface Examples {
         <div class="">
           <a routerLink="uten" class="cursor-pointer group">
             <div class="overflow-hidden">
+<!--              TODO: image should set width/height or aspect-ratio, this may cause problems-->
               <img
                 class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 alt=""
@@ -94,6 +95,7 @@ interface Examples {
         <h2 class="text-5xl font-extralight mb-6">
           Vitra's Environmental Mission
         </h2>
+<!--        TODO: border-t border-b can replace with border-y-->
         <a
           routerLink="/details"
           class="border-t-2 border-b-2  border-black py-2 px-10 hover:bg-black hover:text-white"
@@ -103,6 +105,7 @@ interface Examples {
       </div>
     </section>
 
+<!--    TODO: if this 1380px will use frequently, then it should be place as const-->
     <section class=" m-auto max-w-[1380px] pt-16 text-center">
       <h2 class="text-5xl font-extralight mb-9">Product categories</h2>
       <div class="overflow-x-scroll scrollbar-hide">

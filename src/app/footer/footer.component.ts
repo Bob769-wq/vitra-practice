@@ -7,6 +7,8 @@ interface SocialLink {
   iClass: string;
 }
 
+// TODO: can combine these interfaces into a single one if they share common properties
+
 interface Products {
   id: number;
   link: string;
@@ -42,11 +44,13 @@ interface Legal {
   imports: [RouterLink],
   template: `
     <footer class="pt-8  bg-gray-200 font-light">
+<!--      TODO: the layout here is wrong-->
       <section class=" grid grid-cols-3 gap-12 max-w-7xl m-auto text-center">
         <div class="w-full ">
           <h3 class=" border-b border-b-black py-3 font-bold">Products</h3>
           <ul>
             @for (product of products; track product.id) {
+<!--              TODO: hover should have cursor-pointer indicator-->
               <li class="border-t border-t-gray-300 py-3 hover:text-red-600">
                 <a [routerLink]="product.link">{{ product.title }}</a>
               </li>
