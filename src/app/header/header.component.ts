@@ -3,69 +3,18 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
-// TODO: can combine these interfaces into a single one if they share common properties
+// TODO: can combine these interfaces into a single one if they share common properties done
 
-interface AboutVitraItem {
+interface HeaderList {
+  id: number;
+  title: string;
+  link: string;
+}
+
+interface HeaderImg {
   id: number;
   title: string;
   image: string;
-  link: string;
-}
-
-interface DiscoverList {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface VisitorList {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface MagazineList {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface VitraCampusImg {
-  id: number;
-  title: string;
-  image: string;
-  link: string;
-}
-
-interface HighlightImg {
-  id: number;
-  title: string;
-  image: string;
-  link: string;
-}
-
-interface ProfessionalPic {
-  id: number;
-  title: string;
-  image: string;
-  link: string;
-}
-
-interface ServiceList {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface DownloadList {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface ToolList {
-  id: number;
-  title: string;
   link: string;
 }
 
@@ -73,20 +22,7 @@ interface NavList {
   id: number;
   title: string;
   link: string;
-  dropDown?: boolean;
-}
-
-interface InspirationsList {
-  id: number;
-  title: string;
-  link: string;
-}
-
-interface ServiceImg {
-  id: number;
-  title: string;
-  image: string;
-  link: string;
+  dropDown: boolean;
 }
 
 @Component({
@@ -94,8 +30,10 @@ interface ServiceImg {
   imports: [CommonModule, MatIconModule, RouterLink],
   template: `
     <div class="relative">
-      <header class="bg-white z-50 m-auto max-w-7xl py-3 flex flex-col">
-        <div class="flex justify-end gap-4 text-gray-400">
+      <header
+        class="bg-white z-50 m-auto max-w-7xl py-3 flex flex-col md:px-5 sm:px-5"
+      >
+        <div class="hidden lg:flex justify-end gap-4 text-gray-400">
           <a
             routerLink="/find-vitra"
             class="hover:text-red-600 flex items-center"
@@ -105,18 +43,25 @@ interface ServiceImg {
           </a>
           <a routerLink="/contact" class="hover:text-red-600">Contact</a>
         </div>
+
         <div class="flex justify-between items-baseline">
           <div class="flex items-baseline gap-4">
-            <a routerLink="/" class="text-4xl font-bold">vitra.</a>
-            <ul class="flex gap-6">
+            <button class="lg:hidden" (click)="toggleMenu()">
+              <mat-icon>menu</mat-icon>
+            </button>
+
+            <a routerLink="/" class="hidden lg:block text-4xl font-bold">
+              vitra.
+            </a>
+            <ul class="hidden lg:flex gap-6">
               @for (item of NavList; track item.id) {
                 <li>
-<!--                  routerlink routerlinkAcitve routerlinkActivaOptions-->
+                  <!--                  routerlink routerlinkAcitve routerlinkActivaOptions-->
                   <a
                     [routerLink]="item.link"
                     class="hover:text-red-600"
                     (mouseenter)="
-                      item.dropDown ? setActiveDropdown(item.id) : null
+                      item.dropDown ? setActiveDropdown(item.title) : null
                     "
                   >
                     {{ item.title }}
@@ -126,11 +71,13 @@ interface ServiceImg {
             </ul>
           </div>
 
+          <a routerLink="/" class="text-4xl font-bold lg:hidden">vitra.</a>
+
           <div class="flex gap-3">
             <a routerLink="/search" class="hover:text-red-600">
               <mat-icon>search</mat-icon>
             </a>
-            <div class="relative group">
+            <div class="relative group hidden lg:block">
               <a routerLink="/person" class="hover:text-red-600">
                 <mat-icon>person</mat-icon>
               </a>
@@ -152,7 +99,7 @@ interface ServiceImg {
               </div>
             </div>
 
-            <div class="relative group">
+            <div class="relative group hidden lg:block">
               <a routerLink="/language" class="hover:text-red-600">
                 <mat-icon>language</mat-icon>
               </a>
@@ -186,6 +133,61 @@ interface ServiceImg {
         </div>
       </header>
 
+      @if (isMenuOpen()) {
+        <nav class="lg:hidden fixed inset-0 bg-white z-50 overflow-y-auto">
+          <div
+            class="flex justify-between items-baseline pb-3 border-b border-b-gray-300"
+          >
+            <div (click)="closeMenu()">
+              <mat-icon>close</mat-icon>
+            </div>
+            <a routerLink="/" class="text-4xl font-bold"> vitra. </a>
+            <div>
+              <mat-icon>search</mat-icon>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <ul class="space-y-8 mb-12 ">
+              @for (item of NavList; track item.id) {
+                <li>
+                  <a
+                    [routerLink]="item.link"
+                    class="block py-4 text-2xl hover:text-red-600"
+                  >
+                    {{ item.title }}
+                  </a>
+                </li>
+              }
+            </ul>
+
+            <div class="border-t pt-8 ">
+              <a
+                routerLink="/find-vitra"
+                class="flex items-center gap-2 py-3 text-xl hover:text-red-600"
+              >
+                <mat-icon>location_on</mat-icon>
+                Find Vitra
+              </a>
+              <a
+                routerLink="/contact"
+                class="block py-3 text-xl hover:text-red-600"
+              >
+                <mat-icon>phone</mat-icon>
+                Contact
+              </a>
+              <a
+                routerLink="/person"
+                class="flex items-center gap-2 py-3 text-xl hover:text-red-600"
+              >
+                <mat-icon>person</mat-icon>
+                Account
+              </a>
+            </div>
+          </div>
+        </nav>
+      }
+
       @if (activeDropdown()) {
         <div
           class="absolute top-full left-0 right-0 w-full z-40 bg-white border-t"
@@ -194,105 +196,145 @@ interface ServiceImg {
         >
           <div class="max-w-7xl mx-auto py-8">
             @switch (activeDropdown()) {
-<!--              TODO: these should not use id-->
-              @case (1) {
+              <!--              TODO: these should not use id done-->
+              @case ('Products') {
                 <div class="grid grid-cols-6 gap-6">
                   <div>
                     <h3 class="text-gray-400">Seating furniture</h3>
-<!--                    TODO: use margin top instead margin bottom-->
-                    <ul class="mb-8">
+                    <!--                    TODO: use margin top instead margin bottom done-->
+                    <ul class="flex flex-col gap-1">
                       @for (item of seatingFurnitureItems; track item.id) {
-<!--                        TODO: hover should have cursor-pointer indicator-->
-<!--                        TODO: if is the space between items, use gap is better then padding top-->
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <!--                        TODO: hover should have cursor-pointer indicator done-->
+                        <!--                        TODO: if is the space between items, use gap is better then padding top done-->
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
-                    <h3 class="text-gray-400">Spatial organisation</h3>
-                    <ul>
+                    <h3 class="text-gray-400 mt-8">Spatial organisation</h3>
+                    <ul class="flex flex-col gap-1">
                       @for (item of spatialItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
                   </div>
                   <div>
                     <h3 class="text-gray-400">Tables</h3>
-                    <ul class="mb-8">
+                    <ul class="flex flex-col gap-1">
                       @for (item of TablesItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
-                    <h3 class="text-gray-400">Accessories</h3>
-                    <ul>
+                    <h3 class="text-gray-400 mt-8">Accessories</h3>
+                    <ul class="flex flex-col gap-1">
                       @for (item of accessoriesItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
-                      <li
-                        class="text-base pt-1 hover:text-red-600 text-gray-400"
-                      >
-                        <a class="border-b border-b-gray-400">More</a>
+                      <li class="text-base text-gray-400">
+                        <a
+                          routerLink="/more"
+                          class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                          >More</a
+                        >
                       </li>
                     </ul>
                   </div>
                   <div>
                     <h3 class="text-gray-400">Discover</h3>
-                    <ul class="mb-8">
+                    <ul class="flex flex-col gap-1">
                       @for (item of productDiscoverItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
-                    <h3 class="text-gray-400">Designer</h3>
-                    <ul>
+                    <h3 class="text-gray-400 mt-8">Designer</h3>
+                    <ul class="flex flex-col gap-1">
                       @for (item of designerItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
-                      <li
-                        class="text-base pt-1 hover:text-red-600 text-gray-400"
-                      >
-                        <a class="border-b border-b-gray-400">More</a>
+                      <li class="text-base text-gray-400">
+                        <a
+                          routerLink="/more"
+                          class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                          >More</a
+                        >
                       </li>
                     </ul>
                   </div>
                   <div>
                     <h3 class="text-gray-400">Product finder</h3>
-                    <ul class="mb-8">
+                    <ul class="flex flex-col gap-1">
                       @for (item of finderItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
-                    <h3 class="text-gray-400">Service</h3>
-                    <ul class="mb-8">
+                    <h3 class="text-gray-400 mt-8">Service</h3>
+                    <ul class="flex flex-col gap-1">
                       @for (item of serviceItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
-                    <h3 class="text-gray-400">Circular products</h3>
-                    <ul>
+                    <h3 class="text-gray-400 mt-8">Circular products</h3>
+                    <ul class="flex flex-col gap-1">
                       @for (item of circularItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
                   </div>
                   <div class="col-span-2 flex flex-col gap-4">
                     @for (item of productImage; track item.id) {
-<!--                      TODO: why here need to use group-->
+                      <!--                      TODO: why here need to use group 放在報告-->
                       <div class="relative overflow-hidden group">
                         <a [routerLink]="item.link">
                           <img
@@ -311,76 +353,104 @@ interface ServiceImg {
                   </div>
                 </div>
               }
-              @case (2) {
+              @case ('Inspirations') {
                 <div class="grid grid-cols-6 gap-8">
                   <div class="col-span-3">
                     <div class="grid grid-cols-3 gap-8">
                       <div>
                         <h3 class="text-gray-400">Home</h3>
-                        <ul>
+                        <ul class="flex flex-col gap-1">
                           @for (item of homeItems; track item.id) {
-                            <li class="text-lg pt-1 hover:text-red-600">
-                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            <li class="text-lg">
+                              <a
+                                [routerLink]="item.link"
+                                class="hover:text-red-600"
+                                >{{ item.title }}</a
+                              >
                             </li>
                           }
                         </ul>
                       </div>
                       <div>
                         <h3 class="text-gray-400">Office spaces</h3>
-                        <ul>
+                        <ul class="flex flex-col gap-1">
                           @for (item of officeItems; track item.id) {
-                            <li class="text-lg pt-1 hover:text-red-600">
-                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            <li class="text-lg">
+                              <a
+                                [routerLink]="item.link"
+                                class="hover:text-red-600"
+                                >{{ item.title }}</a
+                              >
                             </li>
                           }
-                          <li
-                            class="text-base pt-1 hover:text-red-600 text-gray-400"
-                          >
-                            <a class="border-b border-b-gray-400">More</a>
+                          <li class="text-base text-gray-400">
+                            <a
+                              routerLink="/more"
+                              class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                              >More</a
+                            >
                           </li>
                         </ul>
                       </div>
                       <div>
                         <h3 class="text-gray-400">Public spaces</h3>
-                        <ul>
+                        <ul class="flex flex-col gap-1">
                           @for (item of publicItems; track item.id) {
-                            <li class="text-lg pt-1 hover:text-red-600">
-                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            <li class="text-lg">
+                              <a
+                                [routerLink]="item.link"
+                                class="hover:text-red-600"
+                                >{{ item.title }}</a
+                              >
                             </li>
                           }
                         </ul>
                       </div>
                       <div>
                         <h3 class="text-gray-400">Discover</h3>
-                        <ul>
+                        <ul class="flex flex-col gap-1">
                           @for (item of homeStoriesItems; track item.id) {
-                            <li class="text-lg pt-1 hover:text-red-600">
-                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            <li class="text-lg">
+                              <a
+                                [routerLink]="item.link"
+                                class="hover:text-red-600"
+                                >{{ item.title }}</a
+                              >
                             </li>
                           }
                         </ul>
                       </div>
                       <div>
                         <h3 class="text-gray-400">Vitra offices & concepts</h3>
-                        <ul>
+                        <ul class="flex flex-col gap-1">
                           @for (item of vitraItems; track item.id) {
-                            <li class="text-lg pt-1 hover:text-red-600">
-                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            <li class="text-lg">
+                              <a
+                                [routerLink]="item.link"
+                                class="hover:text-red-600"
+                                >{{ item.title }}</a
+                              >
                             </li>
                           }
-                          <li
-                            class="text-base pt-1 hover:text-red-600 text-gray-400"
-                          >
-                            <a class="border-b border-b-gray-400">More</a>
+                          <li class="text-base text-gray-400">
+                            <a
+                              routerLink="/more"
+                              class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                              >More</a
+                            >
                           </li>
                         </ul>
                       </div>
                       <div>
                         <h3 class="text-gray-400">Themes</h3>
-                        <ul>
+                        <ul class="flex flex-col gap-1">
                           @for (item of themesItems; track item.id) {
-                            <li class="text-lg pt-1 hover:text-red-600">
-                              <a [routerLink]="item.link">{{ item.title }}</a>
+                            <li class="text-lg">
+                              <a
+                                [routerLink]="item.link"
+                                class="hover:text-red-600"
+                                >{{ item.title }}</a
+                              >
                             </li>
                           }
                         </ul>
@@ -420,29 +490,39 @@ interface ServiceImg {
                   </div>
                 </div>
               }
-              @case (3) {
+              @case ('Services') {
                 <div class="grid grid-cols-5 gap-6">
                   <div>
                     <h3 class="text-gray-400">Product services</h3>
-                    <ul>
+                    <ul class="flex flex-col gap-1">
                       @for (item of productServicesItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class=" hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
                   </div>
                   <div>
                     <h3 class="text-gray-400">Office planning</h3>
-                    <ul class="mb-9">
-                      <li class="text-lg pt-1 hover:text-red-600">
-                        <a routerLink="/studio">Consulting & Planning Studio</a>
+                    <ul class="flex flex-col gap-1">
+                      <li class="text-lg">
+                        <a routerLink="/studio" class=" hover:text-red-600"
+                          >Consulting & Planning Studio</a
+                        >
                       </li>
                     </ul>
-                    <h3 class="text-gray-400">Circular Products</h3>
-                    <ul>
-                      <li class="text-lg pt-1 hover:text-red-600">
-                        <a routerLink="/circle-stores">Vitra Circle Stores</a>
+                    <h3 class="text-gray-400 mt-9">Circular Products</h3>
+                    <ul class="flex flex-col gap-1">
+                      <li class="text-lg">
+                        <a
+                          routerLink="/circle-stores"
+                          class=" hover:text-red-600"
+                          >Vitra Circle Stores</a
+                        >
                       </li>
                     </ul>
                   </div>
@@ -464,31 +544,41 @@ interface ServiceImg {
                   }
                 </div>
               }
-              @case (4) {
+              @case ('Professionals') {
                 <div class="grid grid-cols-5 gap-6">
                   <div>
                     <h3 class="text-gray-400">Downloads</h3>
-                    <ul>
+                    <ul class="flex flex-col gap-1">
                       @for (item of downloadItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class=" hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
                   </div>
                   <div>
                     <h3 class="text-gray-400">Tools</h3>
-                    <ul class="mb-8">
+                    <ul class="flex flex-col gap-1">
                       @for (item of toolItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
-                    <h3 class="text-gray-400">Dealer</h3>
-                    <ul>
-                      <li class="text-lg pt-1 hover:text-red-600">
-                        <a routerLink="/login">To the dealer login</a>
+                    <h3 class="text-gray-400 mt-8">Dealer</h3>
+                    <ul class="flex flex-col gap-1">
+                      <li class="text-lg">
+                        <a routerLink="/login" class="hover:text-red-600"
+                          >To the dealer login</a
+                        >
                       </li>
                     </ul>
                   </div>
@@ -525,20 +615,26 @@ interface ServiceImg {
                   </div>
                 </div>
               }
-              @case (5) {
+              @case ('Magazine') {
                 <div class="grid grid-cols-5 gap-6">
                   <div>
                     <h3 class="text-gray-400">Categories</h3>
-                    <ul>
+                    <ul class="flex flex-col gap-1">
                       @for (item of magazineItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
-                      <li
-                        class="text-base pt-1 hover:text-red-600 text-gray-400"
-                      >
-                        <a class="border-b border-b-gray-400">More</a>
+                      <li class="text-base text-gray-400">
+                        <a
+                          routerLink="/more"
+                          class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                          >More</a
+                        >
                       </li>
                     </ul>
                   </div>
@@ -575,24 +671,32 @@ interface ServiceImg {
                   </div>
                 </div>
               }
-              @case (6) {
+              @case ('Vitra Campus') {
                 <div class="grid grid-cols-5 gap-6">
                   <div>
                     <h3 class="text-gray-400">Discover</h3>
-                    <ul>
+                    <ul class="flex flex-col gap-1">
                       @for (item of discoverItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
                   </div>
                   <div>
                     <h3 class="text-gray-400">Visitor information</h3>
-                    <ul>
+                    <ul class="flex flex-col gap-1">
                       @for (item of visitorItems; track item.id) {
-                        <li class="text-lg pt-1 hover:text-red-600">
-                          <a [routerLink]="item.link">{{ item.title }}</a>
+                        <li class="text-lg">
+                          <a
+                            [routerLink]="item.link"
+                            class="hover:text-red-600"
+                            >{{ item.title }}</a
+                          >
                         </li>
                       }
                     </ul>
@@ -630,7 +734,7 @@ interface ServiceImg {
                   </div>
                 </div>
               }
-              @case (7) {
+              @case ('About Vitra') {
                 <div class="flex justify-between items-start">
                   <h3 class="text-gray-400">Discover About Vitra</h3>
                   <div class="text-gray-200">
@@ -667,13 +771,22 @@ interface ServiceImg {
 })
 export class HeaderComponent {
   // Signal 控制哪個 dropdown 顯示
-  activeDropdown = signal<number | null>(null);
+  activeDropdown = signal<string | null>(null);
 
-  setActiveDropdown(id: number | null) {
-    this.activeDropdown.set(id);
+  setActiveDropdown(title: string | null) {
+    this.activeDropdown.set(title);
   }
 
-  campusImg: VitraCampusImg[] = [
+  isMenuOpen = signal(false);
+  toggleMenu() {
+    this.isMenuOpen.update((value) => !value);
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
+
+  campusImg: HeaderImg[] = [
     {
       id: 1,
       title: 'VitraHaus',
@@ -705,7 +818,7 @@ export class HeaderComponent {
       link: '/garten',
     },
   ];
-  magazineImage: HighlightImg[] = [
+  magazineImage: HeaderImg[] = [
     {
       id: 1,
       title: 'Project Vitra',
@@ -821,7 +934,7 @@ export class HeaderComponent {
       link: '/partnership',
     },
   ];
-  professionalImage: ProfessionalPic[] = [
+  professionalImage: HeaderImg[] = [
     {
       id: 1,
       title: 'Our Clients',
@@ -877,7 +990,7 @@ export class HeaderComponent {
       link: '/office-chairs',
     },
   ];
-  aboutVitraItems: AboutVitraItem[] = [
+  aboutVitraItems: HeaderImg[] = [
     {
       id: 1,
       title: 'Sustainability',
@@ -909,7 +1022,7 @@ export class HeaderComponent {
       link: '/about/history',
     },
   ];
-  discoverItems: DiscoverList[] = [
+  discoverItems: HeaderList[] = [
     {
       id: 1,
       title: 'Exhibitions',
@@ -951,7 +1064,7 @@ export class HeaderComponent {
       link: '/consulting',
     },
   ];
-  visitorItems: VisitorList[] = [
+  visitorItems: HeaderList[] = [
     {
       id: 1,
       title: 'Plan your visit',
@@ -973,7 +1086,7 @@ export class HeaderComponent {
       link: '/news',
     },
   ];
-  magazineItems: MagazineList[] = [
+  magazineItems: HeaderList[] = [
     {
       id: 1,
       title: 'Stories',
@@ -995,7 +1108,7 @@ export class HeaderComponent {
       link: '/designer',
     },
   ];
-  downloadItems: DownloadList[] = [
+  downloadItems: HeaderList[] = [
     {
       id: 1,
       title: 'CAD data',
@@ -1027,7 +1140,7 @@ export class HeaderComponent {
       link: '/ecology',
     },
   ];
-  productServicesItems: ServiceList[] = [
+  productServicesItems: HeaderList[] = [
     {
       id: 1,
       title: 'Care & repair',
@@ -1054,7 +1167,7 @@ export class HeaderComponent {
       link: '/instructions',
     },
   ];
-  productImg: ServiceImg[] = [
+  productImg: HeaderImg[] = [
     {
       id: 1,
       title: 'Consulting & planning in the VitraHaus',
@@ -1074,7 +1187,7 @@ export class HeaderComponent {
       link: '/outdoor',
     },
   ];
-  toolItems: ToolList[] = [
+  toolItems: HeaderList[] = [
     {
       id: 1,
       title: 'pCon',
@@ -1101,7 +1214,7 @@ export class HeaderComponent {
       link: '/home-selection',
     },
   ];
-  homeItems: InspirationsList[] = [
+  homeItems: HeaderList[] = [
     {
       id: 1,
       title: 'Living room',
@@ -1128,7 +1241,7 @@ export class HeaderComponent {
       link: '/outdoor',
     },
   ];
-  homeStoriesItems: InspirationsList[] = [
+  homeStoriesItems: HeaderList[] = [
     {
       id: 1,
       title: 'Home Stories',
@@ -1150,7 +1263,7 @@ export class HeaderComponent {
       link: '/selection',
     },
   ];
-  officeItems: InspirationsList[] = [
+  officeItems: HeaderList[] = [
     {
       id: 1,
       title: 'Workspace',
@@ -1172,7 +1285,7 @@ export class HeaderComponent {
       link: '/workshop',
     },
   ];
-  vitraItems: InspirationsList[] = [
+  vitraItems: HeaderList[] = [
     {
       id: 1,
       title: 'Club Office',
@@ -1194,7 +1307,7 @@ export class HeaderComponent {
       link: '/dynamic',
     },
   ];
-  publicItems: InspirationsList[] = [
+  publicItems: HeaderList[] = [
     {
       id: 1,
       title: 'Hospitality',
@@ -1221,7 +1334,7 @@ export class HeaderComponent {
       link: '/healthcare',
     },
   ];
-  themesItems: InspirationsList[] = [
+  themesItems: HeaderList[] = [
     {
       id: 1,
       title: 'Our Clients',
@@ -1248,7 +1361,7 @@ export class HeaderComponent {
       link: '/dancing-office',
     },
   ];
-  inspirationsImage: ServiceImg[] = [
+  inspirationsImage: HeaderImg[] = [
     {
       id: 1,
       title: 'Home Stories',
@@ -1310,7 +1423,7 @@ export class HeaderComponent {
       link: '/garten',
     },
   ];
-  seatingFurnitureItems: InspirationsList[] = [
+  seatingFurnitureItems: HeaderList[] = [
     {
       id: 1,
       title: 'Chairs',
@@ -1357,7 +1470,7 @@ export class HeaderComponent {
       link: '/airport',
     },
   ];
-  spatialItems: InspirationsList[] = [
+  spatialItems: HeaderList[] = [
     {
       id: 1,
       title: 'Storage space',
@@ -1369,7 +1482,7 @@ export class HeaderComponent {
       link: '/micro',
     },
   ];
-  TablesItems: InspirationsList[] = [
+  TablesItems: HeaderList[] = [
     {
       id: 1,
       title: 'Dining tables',
@@ -1401,7 +1514,7 @@ export class HeaderComponent {
       link: '/conference-systems',
     },
   ];
-  accessoriesItems: InspirationsList[] = [
+  accessoriesItems: HeaderList[] = [
     {
       id: 1,
       title: 'Lighting',
@@ -1428,7 +1541,7 @@ export class HeaderComponent {
       link: '/trays-vessels',
     },
   ];
-  productDiscoverItems: InspirationsList[] = [
+  productDiscoverItems: HeaderList[] = [
     {
       id: 1,
       title: 'New',
@@ -1445,7 +1558,7 @@ export class HeaderComponent {
       link: '/colour-material',
     },
   ];
-  designerItems: InspirationsList[] = [
+  designerItems: HeaderList[] = [
     {
       id: 1,
       title: 'Alexander Girard',
@@ -1482,7 +1595,7 @@ export class HeaderComponent {
       link: '/isamu',
     },
   ];
-  finderItems: InspirationsList[] = [
+  finderItems: HeaderList[] = [
     {
       id: 1,
       title: 'Lounge chair finder',
@@ -1499,7 +1612,7 @@ export class HeaderComponent {
       link: '/gift-finder',
     },
   ];
-  serviceItems: InspirationsList[] = [
+  serviceItems: HeaderList[] = [
     {
       id: 1,
       title: 'Care & repair',
@@ -1521,10 +1634,10 @@ export class HeaderComponent {
       link: '/warranty',
     },
   ];
-  circularItems: InspirationsList[] = [
+  circularItems: HeaderList[] = [
     { id: 1, title: 'Vitra Circle Stores', link: '/vitra-circle' },
   ];
-  productImage: ServiceImg[] = [
+  productImage: HeaderImg[] = [
     {
       id: 1,
       title: 'Mynt: sit differently',

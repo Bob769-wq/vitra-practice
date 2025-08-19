@@ -29,7 +29,7 @@ interface Examples {
   selector: 'app-main',
   imports: [CommonModule, RouterLink],
   template: `
-    <section class="group relative ">
+    <section class="group relative hidden lg:block">
       <img
         src="/sofa.jpg"
         alt="slow chair slow sofa"
@@ -61,14 +61,29 @@ interface Examples {
       </div>
     </section>
 
-    <section class="grid grid-cols-2 gap-4 py-16  m-auto max-w-7xl">
+    <section class="lg:hidden">
+      <img
+        src="/sofa.jpg"
+        alt="slow chair slow sofa"
+        class="w-full aspect-[5/2]  object-cover"
+      />
+      <div class="flex flex-col items-center p-5">
+        <h1 class="text-3xl">Slow Chair & Slow Sofa</h1>
+        <p class=" text-xl mb-8 ">A haven for slowing down</p>
+        <button class="bg-gray-900 text-white w-full py-4">MORE DETAILS</button>
+      </div>
+    </section>
+
+    <section
+      class="grid grid-cols-1 px-5 md:grid-cols-2 gap-4 py-16  m-auto max-w-7xl md:px-5"
+    >
       @for (activity of activities; track activity.id) {
         <div class="">
           <a routerLink="uten" class="cursor-pointer group">
             <div class="overflow-hidden">
-<!--              TODO: image should set width/height or aspect-ratio, this may cause problems-->
+              <!--              TODO: image should set width/height or aspect-ratio, this may cause problems done-->
               <img
-                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                class="w-full h-full aspect-[3/2] object-cover transition-transform duration-500 hover:scale-110"
                 alt=""
                 [src]="activity.image"
               />
@@ -86,27 +101,41 @@ interface Examples {
       }
     </section>
 
-    <section
-      routerLink="/mission"
-      class="relative h-96 bg-cover bg-center bg-no-repeat flex justify-center items-center text-center "
-      style="background-image: url('/mission.jpg')"
-    >
-      <div class="w-1/3">
+    <section routerLink="=/mission" class="relative">
+      <img src="/mission.jpg" alt="" />
+      <div class="absolute inset-0 flex flex-col justify-center items-center">
         <h2 class="text-5xl font-extralight mb-6">
           Vitra's Environmental Mission
         </h2>
-<!--        TODO: border-t border-b can replace with border-y-->
         <a
           routerLink="/details"
-          class="border-t-2 border-b-2  border-black py-2 px-10 hover:bg-black hover:text-white"
+          class="border-y-2 border-black py-2 px-10 hover:bg-black hover:text-white"
         >
           MORE DETAILS
         </a>
       </div>
     </section>
 
-<!--    TODO: if this 1380px will use frequently, then it should be place as const-->
-    <section class=" m-auto max-w-[1380px] pt-16 text-center">
+    <!--    <section-->
+    <!--      routerLink="/mission"-->
+    <!--      class="relative h-96 bg-cover bg-center bg-no-repeat flex justify-center items-center text-center "-->
+    <!--      style="background-image: url('/mission.jpg')"-->
+    <!--    >-->
+    <!--      <div class="w-1/3">-->
+    <!--        <h2 class="text-5xl font-extralight mb-6">-->
+    <!--          Vitra's Environmental Mission-->
+    <!--        </h2>-->
+    <!--        <a-->
+    <!--          routerLink="/details"-->
+    <!--          class="border-y-2  border-black py-2 px-10 hover:bg-black hover:text-white"-->
+    <!--        >-->
+    <!--          MORE DETAILS-->
+    <!--        </a>-->
+    <!--      </div>-->
+    <!--    </section>-->
+
+    <!--    TODO: if this 1380px will use frequently, then it should be place as const done-->
+    <section class=" m-auto max-w-[var(--container-width)] pt-16 text-center">
       <h2 class="text-5xl font-extralight mb-9">Product categories</h2>
       <div class="overflow-x-scroll scrollbar-hide">
         <div class="flex gap-6 w-max">
@@ -130,13 +159,13 @@ interface Examples {
       </div>
     </section>
 
-    <section class="m-auto max-w-7xl pb-12">
-      <div class="grid grid-cols-2 gap-4 mt-20">
+    <section class="m-auto max-w-7xl pb-12 ">
+      <div class="grid grid-cols-1 px-5  lg:grid-cols-2 gap-4 mt-20 lg:px-0">
         @for (example of examples; track example.id) {
           <a [routerLink]="example.link" class=" group ">
             <div class="overflow-hidden">
               <img
-                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                class="w-full h-full aspect-[3/2] object-cover transition-transform duration-500 hover:scale-110"
                 alt=""
                 [src]="example.image"
               />
@@ -154,11 +183,17 @@ interface Examples {
       </div>
     </section>
 
-    <section class="grid grid-cols-3 m-auto max-w-[1600px] w-full ">
-      <div class="col-span-2">
-        <img src="/destination.jpg" alt="destination" />
+    <section
+      class="grid grid-cols-1 lg:grid-cols-3 m-auto max-w-[1600px] w-full "
+    >
+      <div class="col-span-1 lg:col-span-2">
+        <img
+          src="/destination.jpg"
+          alt="destination"
+          class="w-full h-full object-cover"
+        />
       </div>
-      <div class="bg-gray-300 px-10 flex items-center">
+      <div class="bg-gray-300 p-10 lg:px-10 flex items-center">
         <div>
           <h3 class="text-4xl">Destination Workplace</h3>
           <p class="text-xl py-10 leading-8">
@@ -167,17 +202,20 @@ interface Examples {
             firsthand how they have successfully redefined their spaces and find
             inspiration for your own.
           </p>
-          <a
+          <button
             class="bg-gray-900 text-white px-10 py-4 hover:bg-gray-500 "
             routerLink="/more"
-            >MORE DETAILS</a
           >
+            MORE DETAILS
+          </button>
         </div>
       </div>
     </section>
 
     <section class="bg-gray-100">
-      <div class=" max-w-7xl m-auto py-20 grid grid-cols-2 mt-16">
+      <div
+        class="grid grid-cols-1 gap-3 px-5 max-w-7xl m-auto py-20 lg:grid-cols-2 lg:px-0 mt-16"
+      >
         <div>
           <h3 class="text-2xl font-medium">Vitra Newsletter</h3>
           <p class="text-base">

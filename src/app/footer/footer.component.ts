@@ -7,33 +7,9 @@ interface SocialLink {
   iClass: string;
 }
 
-// TODO: can combine these interfaces into a single one if they share common properties
+// TODO: can combine these interfaces into a single one if they share common properties done
 
-interface Products {
-  id: number;
-  link: string;
-  title: string;
-}
-
-interface About {
-  id: number;
-  link: string;
-  title: string;
-}
-
-interface Contact {
-  id: number;
-  link: string;
-  title: string;
-}
-
-interface Professionals {
-  id: number;
-  link: string;
-  title: string;
-}
-
-interface Legal {
+interface FooterItems {
   id: number;
   link: string;
   title: string;
@@ -43,85 +19,108 @@ interface Legal {
   selector: 'app-footer',
   imports: [RouterLink],
   template: `
-    <footer class="pt-8  bg-gray-200 font-light">
-<!--      TODO: the layout here is wrong-->
-      <section class=" grid grid-cols-3 gap-12 max-w-7xl m-auto text-center">
-        <div class="w-full ">
-          <h3 class=" border-b border-b-black py-3 font-bold">Products</h3>
-          <ul>
-            @for (product of products; track product.id) {
-<!--              TODO: hover should have cursor-pointer indicator-->
-              <li class="border-t border-t-gray-300 py-3 hover:text-red-600">
-                <a [routerLink]="product.link">{{ product.title }}</a>
-              </li>
-            }
-          </ul>
+    <footer class="pt-8 bg-gray-200 font-light">
+      <!--      TODO: the layout here is wrong done-->
+      <section
+        class="px-5 flex flex-col lg:px-0  lg:flex-row gap-12 max-w-7xl m-auto text-center"
+      >
+        <div class="w-full">
+          <div>
+            <h3 class=" border-b border-b-black py-3 font-bold">Products</h3>
+            <ul>
+              @for (product of products; track product.id) {
+                <!--              TODO: hover should have cursor-pointer indicator done-->
+                <li class="border-t border-t-gray-300 py-3">
+                  <a [routerLink]="product.link" class="hover:text-red-600">{{
+                    product.title
+                  }}</a>
+                </li>
+              }
+            </ul>
+          </div>
+          <div>
+            <h3 class=" border-b border-b-black py-3 font-bold">
+              Professionals
+            </h3>
+            <ul>
+              @for (professional of professionals; track professional.id) {
+                <li class="border-t border-t-gray-300 py-3">
+                  <a
+                    [routerLink]="professional.link"
+                    class="hover:text-red-600"
+                    >{{ professional.title }}</a
+                  >
+                </li>
+              }
+            </ul>
+          </div>
         </div>
-        <div class="w-full ">
-          <h3 class=" border-b border-b-black py-3 font-bold">About Vitra</h3>
-          <ul>
-            @for (about of abouts; track about.id) {
-              <li class="border-t border-t-gray-300 py-3 hover:text-red-600">
-                <a [routerLink]="about.link">{{ about.title }}</a>
-              </li>
-            }
-          </ul>
+        <div class="w-full">
+          <div class="w-full ">
+            <h3 class=" border-b border-b-black py-3 font-bold">About Vitra</h3>
+            <ul>
+              @for (about of abouts; track about.id) {
+                <li class="border-t border-t-gray-300 py-3">
+                  <a [routerLink]="about.link" class="hover:text-red-600">{{
+                    about.title
+                  }}</a>
+                </li>
+              }
+            </ul>
+          </div>
         </div>
-        <div class="w-full ">
-          <h3 class=" border-b border-b-black py-3 font-bold">Contact</h3>
-          <ul>
-            @for (contact of contacts; track contact.id) {
-              <li class="border-t border-t-gray-300 py-3 hover:text-red-600">
-                <a [routerLink]="contact.link">{{ contact.title }}</a>
-              </li>
-            }
-          </ul>
+        <div class="w-full">
+          <div>
+            <h3 class=" border-b border-b-black py-3 font-bold">Contact</h3>
+            <ul>
+              @for (contact of contacts; track contact.id) {
+                <li class="border-t border-t-gray-300 py-3">
+                  <a [routerLink]="contact.link" class="hover:text-red-600">{{
+                    contact.title
+                  }}</a>
+                </li>
+              }
+            </ul>
+          </div>
+          <div>
+            <h3 class=" border-b border-b-black py-3 font-bold">Legal</h3>
+            <ul>
+              @for (legal of legals; track legal.id) {
+                <li class="border-t border-t-gray-300 py-3">
+                  <a [routerLink]="legal.link" class="hover:text-red-600">
+                    {{ legal.title }}</a
+                  >
+                </li>
+              }
+            </ul>
+          </div>
         </div>
-        <div class="w-full ">
-          <h3 class=" border-b border-b-black py-3 font-bold">Professionals</h3>
-          <ul>
-            @for (professional of professionals; track professional.id) {
-              <li class="border-t border-t-gray-300 py-3 hover:text-red-600">
-                <a [routerLink]="professional.link">{{ professional.title }}</a>
-              </li>
-            }
-          </ul>
-        </div>
-        <div></div>
-        <div class="w-full ">
-          <h3 class=" border-b border-b-black py-3 font-bold">Legal</h3>
-          <ul>
-            @for (legal of legals; track legal.id) {
-              <li class="border-t border-t-gray-300 py-3 hover:text-red-600">
-                <a [routerLink]="legal.link"> {{ legal.title }}</a>
-              </li>
-            }
-          </ul>
-        </div>
-        <div></div>
-        <div class="w-full  ">
-          <ul class="flex justify-center text-3xl">
-            @for (social of socialLinks; track social.id) {
-              <li class="p-2 hover:text-red-600">
-                <a [routerLink]="social.link"
-                  ><i [class]="social.iClass"></i
-                ></a>
-              </li>
-            }
-          </ul>
-          <p class="py-3 text-sm">COPYRIGHT 2025 VITRA INTERNATIONAL AG</p>
-          <a routerLink="/cookies" class="block text-sm py-3 hover:text-red-600"
-            >Cookie Settings</a
-          >
-          <button
-            (click)="scrollToTop()"
-            class="text-white w-full py-3 bg-gray-800 hover:bg-gray-500"
-          >
-            UP
-          </button>
-        </div>
-        <div></div>
       </section>
+
+      <div class="flex flex-col items-center gap-6 ">
+        <ul class="flex justify-center text-3xl">
+          @for (social of socialLinks; track social.id) {
+            <li class="p-2">
+              <a [routerLink]="social.link" class="hover:text-red-600"
+                ><i [class]="social.iClass"></i
+              ></a>
+            </li>
+          }
+        </ul>
+
+        <p class="text-sm text-center">COPYRIGHT 2025 VITRA INTERNATIONAL AG</p>
+        <a
+          routerLink="/cookies"
+          class="block text-sm text-center hover:text-red-600"
+          >Cookie Settings</a
+        >
+        <button
+          (click)="scrollToTop()"
+          class="text-white px-48 py-4 bg-gray-900 hover:bg-gray-500"
+        >
+          UP
+        </button>
+      </div>
     </footer>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -160,7 +159,7 @@ export class FooterComponent {
     },
   ];
 
-  products: Products[] = [
+  products: FooterItems[] = [
     {
       id: 1,
       link: '/all-products',
@@ -188,7 +187,7 @@ export class FooterComponent {
     },
   ];
 
-  abouts: About[] = [
+  abouts: FooterItems[] = [
     {
       id: 1,
       link: '/facts',
@@ -221,7 +220,7 @@ export class FooterComponent {
     },
   ];
 
-  contacts: Contact[] = [
+  contacts: FooterItems[] = [
     {
       id: 1,
       link: '/contact-vitra',
@@ -249,7 +248,7 @@ export class FooterComponent {
     },
   ];
 
-  professionals: Professionals[] = [
+  professionals: FooterItems[] = [
     {
       id: 1,
       link: '/downloads',
@@ -272,7 +271,7 @@ export class FooterComponent {
     },
   ];
 
-  legals: Legal[] = [
+  legals: FooterItems[] = [
     {
       id: 1,
       link: '/rights',
