@@ -334,7 +334,7 @@ interface NavList {
                   </div>
                   <div class="col-span-2 flex flex-col gap-4">
                     @for (item of productImage; track item.id) {
-                      <!--                      TODO: why here need to use group 放在報告-->
+                      <!--                      TODO: why here need to use group 有文字在那邊需要group才能動-->
                       <div class="relative overflow-hidden group">
                         <a [routerLink]="item.link">
                           <img
