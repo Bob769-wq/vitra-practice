@@ -5,6 +5,13 @@ import { RouterLink } from '@angular/router';
 
 // TODO: can combine these interfaces into a single one if they share common properties done
 
+interface MenuIconList {
+  id: number;
+  title?: string;
+  icon: string;
+  link: string;
+}
+
 interface HeaderList {
   id: number;
   title: string;
@@ -31,7 +38,7 @@ interface NavList {
   template: `
     <div class="relative">
       <header
-        class="bg-white z-50 m-auto max-w-7xl py-3 flex flex-col md:px-5 sm:px-5"
+        class="px-5 bg-white z-50 m-auto max-w-7xl py-3 flex flex-col lg:px-0"
       >
         <div class="hidden lg:flex justify-end gap-4 text-gray-400">
           <a
@@ -134,55 +141,52 @@ interface NavList {
       </header>
 
       @if (isMenuOpen()) {
-        <nav class="lg:hidden fixed inset-0 bg-white z-50 overflow-y-auto">
+        <nav class="lg:hidden fixed inset-0 bg-white z-50">
           <div
-            class="flex justify-between items-baseline pb-3 border-b border-b-gray-300"
+            class="flex justify-between items-baseline py-3 px-5 border-b border-b-gray-300"
           >
             <div (click)="closeMenu()">
               <mat-icon>close</mat-icon>
             </div>
-            <a routerLink="/" class="text-4xl font-bold"> vitra. </a>
+            <div>
+              <a routerLink="/" class="text-4xl font-bold"> vitra.</a>
+            </div>
             <div>
               <mat-icon>search</mat-icon>
             </div>
           </div>
 
-          <div class="p-6">
-            <ul class="space-y-8 mb-12 ">
+          <div class="px-5">
+            <ul class="flex flex-col gap-6 py-6">
               @for (item of NavList; track item.id) {
-                <li>
+                <li class="flex justify-between items-center">
                   <a
                     [routerLink]="item.link"
-                    class="block py-4 text-2xl hover:text-red-600"
+                    class="block  text-xl hover:text-red-600"
                   >
                     {{ item.title }}
                   </a>
+                  <mat-icon>arrow_forward</mat-icon>
                 </li>
               }
             </ul>
+          </div>
 
-            <div class="border-t pt-8 ">
-              <a
-                routerLink="/find-vitra"
-                class="flex items-center gap-2 py-3 text-xl hover:text-red-600"
-              >
-                <mat-icon>location_on</mat-icon>
-                Find Vitra
-              </a>
-              <a
-                routerLink="/contact"
-                class="block py-3 text-xl hover:text-red-600"
-              >
-                <mat-icon>phone</mat-icon>
-                Contact
-              </a>
-              <a
-                routerLink="/person"
-                class="flex items-center gap-2 py-3 text-xl hover:text-red-600"
-              >
-                <mat-icon>person</mat-icon>
-                Account
-              </a>
+          <div class="bg-gray-200">
+            <div class="px-5 pt-6">
+              <ul class="flex flex-col gap-6 py-6">
+                @for (item of menuIconItems; track item.id) {
+                  <li class="flex justify-between items-center">
+                    <a
+                      [routerLink]="item.link"
+                      class="flex items-center gap-2 text-xl hover:text-red-600"
+                    >
+                      <mat-icon>{{ item.icon }}</mat-icon>
+                      {{ item.title }}
+                    </a>
+                  </li>
+                }
+              </ul>
             </div>
           </div>
         </nav>
@@ -334,7 +338,7 @@ interface NavList {
                   </div>
                   <div class="col-span-2 flex flex-col gap-4">
                     @for (item of productImage; track item.id) {
-                      <!--                      TODO: why here need to use group 有文字在那邊需要group才能動-->
+                      <!--                      TODO: why here need to use group 有文字在那邊需要group才能動p-->
                       <div class="relative overflow-hidden group">
                         <a [routerLink]="item.link">
                           <img
@@ -1649,6 +1653,37 @@ export class HeaderComponent {
       title: 'Antony Limited Edition 2025',
       link: '/antony-limited-edition',
       image: '/categories.jpg',
+    },
+  ];
+  menuIconItems: MenuIconList[] = [
+    {
+      id: 1,
+      title: 'Account',
+      icon: 'person',
+      link: '/account',
+    },
+    {
+      id: 2,
+      title: 'Wishlist',
+      icon: 'favorite',
+      link: '/wishlist',
+    },
+    {
+      id: 3,
+      icon: 'language',
+      link: '/language',
+    },
+    {
+      id: 4,
+      title: 'Find Vitra',
+      icon: 'location_on',
+      link: '/find-vitra',
+    },
+    {
+      id: 5,
+      title: 'Contact',
+      icon: 'phone',
+      link: '/phone',
     },
   ];
 

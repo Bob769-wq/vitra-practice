@@ -102,9 +102,19 @@ interface Examples {
     </section>
 
     <section routerLink="=/mission" class="relative">
-      <img src="/mission.jpg" alt="" />
+      <div
+        class="relative w-full h-80 sm:h-72 md:h-80 lg:h-96  overflow-hidden"
+      >
+        <img
+          src="/mission.jpg"
+          alt="mission "
+          class="w-full h-full object-cover"
+        />
+      </div>
       <div class="absolute inset-0 flex flex-col justify-center items-center">
-        <h2 class="text-5xl font-extralight mb-6">
+        <h2
+          class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight mb-6"
+        >
           Vitra's Environmental Mission
         </h2>
         <a

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface SocialLink {
@@ -14,20 +14,26 @@ interface FooterItems {
   link: string;
   title: string;
 }
+type SectionKey = 'products' | 'professionals' | 'about' | 'contact' | 'legal';
 
 @Component({
   selector: 'app-footer',
   imports: [RouterLink],
   template: `
-    <footer class="pt-8 bg-gray-200 font-light">
+    <footer class="py-6 md:pb-0 pt-6 bg-gray-200 font-light">
       <!--      TODO: the layout here is wrong done-->
       <section
-        class="px-5 flex flex-col lg:px-0  lg:flex-row gap-12 max-w-7xl m-auto text-center"
+        class="px-5 flex flex-col md:text-center lg:px-0 lg:flex-row lg:gap-12 max-w-7xl m-auto lg:text-center"
       >
         <div class="w-full">
           <div>
-            <h3 class=" border-b border-b-black py-3 font-bold">Products</h3>
-            <ul>
+            <h3
+              class="border-b border-b-black py-3 font-bold"
+              (click)="toggleSection('products')"
+            >
+              Products
+            </h3>
+            <ul [class.hidden]="!openSections()['products']" class="lg:block">
               @for (product of products; track product.id) {
                 <!--              TODO: hover should have cursor-pointer indicator done-->
                 <li class="border-t border-t-gray-300 py-3">
@@ -39,10 +45,16 @@ interface FooterItems {
             </ul>
           </div>
           <div>
-            <h3 class=" border-b border-b-black py-3 font-bold">
+            <h3
+              class=" border-b border-b-black py-3 font-bold"
+              (click)="toggleSection('professionals')"
+            >
               Professionals
             </h3>
-            <ul>
+            <ul
+              [class.hidden]="!openSections()['professionals']"
+              class="lg:block"
+            >
               @for (professional of professionals; track professional.id) {
                 <li class="border-t border-t-gray-300 py-3">
                   <a
@@ -57,8 +69,13 @@ interface FooterItems {
         </div>
         <div class="w-full">
           <div class="w-full ">
-            <h3 class=" border-b border-b-black py-3 font-bold">About Vitra</h3>
-            <ul>
+            <h3
+              class=" border-b border-b-black py-3 font-bold"
+              (click)="toggleSection('about')"
+            >
+              About Vitra
+            </h3>
+            <ul [class.hidden]="!openSections()['about']" class="lg:block">
               @for (about of abouts; track about.id) {
                 <li class="border-t border-t-gray-300 py-3">
                   <a [routerLink]="about.link" class="hover:text-red-600">{{
@@ -71,8 +88,13 @@ interface FooterItems {
         </div>
         <div class="w-full">
           <div>
-            <h3 class=" border-b border-b-black py-3 font-bold">Contact</h3>
-            <ul>
+            <h3
+              class=" border-b border-b-black py-3 font-bold"
+              (click)="toggleSection('contact')"
+            >
+              Contact
+            </h3>
+            <ul [class.hidden]="!openSections()['contact']" class="lg:block">
               @for (contact of contacts; track contact.id) {
                 <li class="border-t border-t-gray-300 py-3">
                   <a [routerLink]="contact.link" class="hover:text-red-600">{{
@@ -83,8 +105,13 @@ interface FooterItems {
             </ul>
           </div>
           <div>
-            <h3 class=" border-b border-b-black py-3 font-bold">Legal</h3>
-            <ul>
+            <h3
+              class=" border-b border-b-black py-3 font-bold"
+              (click)="toggleSection('legal')"
+            >
+              Legal
+            </h3>
+            <ul [class.hidden]="!openSections()['legal']" class="lg:block">
               @for (legal of legals; track legal.id) {
                 <li class="border-t border-t-gray-300 py-3">
                   <a [routerLink]="legal.link" class="hover:text-red-600">
@@ -97,7 +124,7 @@ interface FooterItems {
         </div>
       </section>
 
-      <div class="flex flex-col items-center gap-6 ">
+      <div class="flex flex-col items-center gap-6 pt-10">
         <ul class="flex justify-center text-3xl">
           @for (social of socialLinks; track social.id) {
             <li class="p-2">
@@ -294,5 +321,23 @@ export class FooterComponent {
       top: 0,
       behavior: 'smooth',
     });
+  }
+
+  openSections = signal<Record<SectionKey, boolean>>({
+    products: false,
+    professionals: false,
+    about: false,
+    contact: false,
+    legal: false,
+  });
+
+  toggleSection(section: SectionKey) {
+    this.openSections.update(
+      (current) =>
+        ({
+          ...current,
+          [section]: !current[section],
+        }) as Record<SectionKey, boolean>
+    );
   }
 }
