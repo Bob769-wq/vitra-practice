@@ -25,11 +25,22 @@ interface HeaderImg {
   link: string;
 }
 
-interface NavList {
+interface NavItem {
   id: number;
   title: string;
-  link: string;
+  link?: string;
   dropDown: boolean;
+  children?: NavChild[];
+  menuType?: 'simple' | 'grouped';
+}
+
+interface NavChild {
+  id: number;
+  title: string;
+  link?: string;
+  dropDown: boolean;
+  isGroupHeader?: boolean;
+  isGroupDivider?: boolean;
 }
 
 @Component({
@@ -141,7 +152,7 @@ interface NavList {
       </header>
 
       @if (isMenuOpen()) {
-        <nav class="lg:hidden fixed inset-0 bg-white z-50">
+        <nav class="lg:hidden fixed inset-0 bg-white z-50 overflow-y-auto">
           <div
             class="flex justify-between items-baseline py-3 px-5 border-b border-b-gray-300"
           >
@@ -156,30 +167,77 @@ interface NavList {
             </div>
           </div>
 
-          <div class="px-5">
-            <ul class="flex flex-col gap-6 py-6">
-              @for (item of NavList; track item.id) {
-                <li class="flex justify-between items-center">
+          @if (showSubmenu()) {
+            <div
+              class="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-200"
+            >
+              <button
+                (click)="goBack()"
+                class="flex items-center text-gray-600 hover:text-black"
+              >
+                <mat-icon>arrow_back_ios</mat-icon>
+              </button>
+              <div class="text-xl ">
+                {{ selectedParent()?.title }}
+              </div>
+              <div></div>
+            </div>
+          }
+
+          @if (!showSubmenu()) {
+            <div class="px-5 pb-0">
+              <ul class="flex flex-col gap-8 py-6">
+                @for (item of NavList; track item.id) {
                   <a
                     [routerLink]="item.link"
                     class="block  text-xl hover:text-red-600"
+                    (click)="openSubmenu(item)"
                   >
-                    {{ item.title }}
-                  </a>
-                  <mat-icon>arrow_forward</mat-icon>
-                </li>
-              }
-            </ul>
-          </div>
+                    <li class="flex justify-between items-center">
+                      {{ item.title }}
 
-          <div class="bg-gray-200">
-            <div class="px-5 pt-6">
+                      <mat-icon>arrow_forward</mat-icon>
+                    </li>
+                  </a>
+                }
+              </ul>
+            </div>
+          }
+
+          @if (showSubmenu() && selectedParent()) {
+            <div class="px-5">
               <ul class="flex flex-col gap-6 py-6">
+                @for (child of selectedParent()!.children; track child.id) {
+                  @if (child.isGroupHeader) {
+                    <li class="text-gray-500 text-sm font-medium mt-4">
+                      {{ child.title }}
+                    </li>
+                  } @else if (child.isGroupDivider) {
+                    <li class="border-t border-gray-300 my-4"></li>
+                  } @else {
+                    <li class="flex justify-between items-center">
+                      <a
+                        class="block text-xl hover:text-red-600 cursor-pointer"
+                      >
+                        {{ child.title }}
+                      </a>
+                      <mat-icon>arrow_forward</mat-icon>
+                    </li>
+                  }
+                }
+              </ul>
+            </div>
+          }
+
+          <div class="bg-gray-200 py-20">
+            <div class="px-5">
+              <ul class="flex flex-col gap-6">
                 @for (item of menuIconItems; track item.id) {
                   <li class="flex justify-between items-center">
                     <a
                       [routerLink]="item.link"
                       class="flex items-center gap-2 text-xl hover:text-red-600"
+                      (click)="closeMenu()"
                     >
                       <mat-icon>{{ item.icon }}</mat-icon>
                       {{ item.title }}
@@ -774,7 +832,6 @@ interface NavList {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  // Signal 控制哪個 dropdown 顯示
   activeDropdown = signal<string | null>(null);
 
   setActiveDropdown(title: string | null) {
@@ -788,6 +845,8 @@ export class HeaderComponent {
 
   closeMenu() {
     this.isMenuOpen.set(false);
+    this.showSubmenu.set(false);
+    this.selectedParent.set(null);
   }
 
   campusImg: HeaderImg[] = [
@@ -1687,13 +1746,119 @@ export class HeaderComponent {
     },
   ];
 
-  NavList: NavList[] = [
-    { id: 1, title: 'Products', link: '/products', dropDown: true },
-    { id: 2, title: 'Inspirations', link: '/inspirations', dropDown: true },
-    { id: 3, title: 'Services', link: '/services', dropDown: true },
-    { id: 4, title: 'Professionals', link: '/professionals', dropDown: true },
-    { id: 5, title: 'Magazine', link: '/magazine', dropDown: true },
-    { id: 6, title: 'Vitra Campus', link: '/campus', dropDown: true },
-    { id: 7, title: 'About Vitra', link: '/about', dropDown: true },
+  showSubmenu = signal(false);
+  selectedParent = signal<NavItem | null>(null);
+
+  openSubmenu(item: NavItem) {
+    if (item.children && item.children.length > 0) {
+      this.selectedParent.set(item);
+      this.showSubmenu.set(true);
+    }
+  }
+  goBack() {
+    this.showSubmenu.set(false);
+    this.selectedParent.set(null);
+  }
+
+  NavList: NavItem[] = [
+    {
+      id: 1,
+      title: 'Products',
+      link: '/products',
+      dropDown: true,
+      children: [
+        { id: 11, title: 'Seating furniture', dropDown: false },
+        { id: 12, title: 'Spatial organisation', dropDown: false },
+        { id: 13, title: 'Tables', dropDown: false },
+        { id: 14, title: 'Accessories', dropDown: false },
+        { id: 15, title: 'Discover', dropDown: false },
+        { id: 16, title: 'Designer', dropDown: false },
+        { id: 17, title: 'Product finder', dropDown: false },
+        { id: 18, title: 'Service', dropDown: false },
+        { id: 19, title: 'Circular products', dropDown: false },
+      ],
+    },
+
+    {
+      id: 2,
+      title: 'Inspirations',
+      menuType: 'grouped',
+      dropDown: true,
+      children: [
+        { id: 21, title: 'Home', dropDown: false, isGroupHeader: true },
+        { id: 22, title: 'Living room', dropDown: false },
+        { id: 23, title: 'Dining room', dropDown: false },
+        { id: 24, title: 'Home Office', dropDown: false },
+        { id: 25, title: "Children's room", dropDown: false },
+        { id: 26, title: 'Outdoor', dropDown: false },
+
+        { id: 27, title: '', dropDown: false, isGroupDivider: true },
+
+        { id: 28, title: 'Discover', dropDown: false, isGroupHeader: true },
+        { id: 29, title: 'Home Stories', dropDown: false },
+        { id: 30, title: 'Augmented Reality', dropDown: false },
+        { id: 31, title: 'Colours & materials', dropDown: false },
+        { id: 32, title: 'Home Selection', dropDown: false },
+
+        { id: 33, title: '', dropDown: false, isGroupDivider: true },
+
+        {
+          id: 34,
+          title: 'Office spaces',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 35, title: 'Workspace', dropDown: false },
+        { id: 36, title: 'Focus', dropDown: false },
+        { id: 37, title: 'Meeting', dropDown: false },
+        { id: 38, title: 'Workshop', dropDown: false },
+
+        {
+          id: 39,
+          title: 'Vitra offices & concepts',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 40, title: 'Club Office', dropDown: false },
+        { id: 41, title: 'Citizen Office', dropDown: false },
+        { id: 42, title: 'Studio Office', dropDown: false },
+        { id: 43, title: 'Dynamic Spaces', dropDown: false },
+      ],
+    },
+    {
+      id: 3,
+      title: 'Services',
+      link: '/services',
+      dropDown: true,
+      children: [],
+    },
+    {
+      id: 4,
+      title: 'Professionals',
+      link: '/professionals',
+      dropDown: true,
+      children: [],
+    },
+    {
+      id: 5,
+      title: 'Magazine',
+      link: '/magazine',
+      dropDown: true,
+      children: [],
+    },
+    {
+      id: 6,
+      title: 'Vitra Campus',
+      link: '/campus',
+      dropDown: true,
+      children: [],
+    },
+    {
+      id: 7,
+      title: 'About Vitra',
+      link: '/about',
+      dropDown: true,
+      children: [],
+    },
   ];
 }
