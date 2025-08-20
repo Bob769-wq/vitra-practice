@@ -31,6 +31,7 @@ interface NavItem {
   link?: string;
   dropDown: boolean;
   children?: NavChild[];
+  imageItems?: NavImageItem[];
   menuType?: 'simple' | 'grouped';
 }
 
@@ -41,6 +42,14 @@ interface NavChild {
   dropDown: boolean;
   isGroupHeader?: boolean;
   isGroupDivider?: boolean;
+}
+
+interface NavImageItem {
+  id: number;
+  title: string;
+  imageUrl: string;
+  imageTitle: string;
+  link?: string;
 }
 
 @Component({
@@ -206,14 +215,14 @@ interface NavChild {
 
           @if (showSubmenu() && selectedParent()) {
             <div class="px-5">
-              <ul class="flex flex-col gap-6 py-6">
+              <ul class="flex flex-col gap-6 pt-6">
                 @for (child of selectedParent()!.children; track child.id) {
                   @if (child.isGroupHeader) {
                     <li class="text-gray-500 text-sm font-medium mt-4">
                       {{ child.title }}
                     </li>
                   } @else if (child.isGroupDivider) {
-                    <li class="border-t border-gray-300 my-4"></li>
+                    <li class="border-t border-gray-300"></li>
                   } @else {
                     <li class="flex justify-between items-center">
                       <a
@@ -226,6 +235,38 @@ interface NavChild {
                   }
                 }
               </ul>
+
+              @if (
+                selectedParent()!.imageItems &&
+                selectedParent()!.imageItems!.length > 0
+              ) {
+                <div class="overflow-x-auto -mx-5 px-5">
+                  <div class="flex gap-4">
+                    @for (
+                      imageItem of selectedParent()!.imageItems;
+                      track imageItem.id
+                    ) {
+                      <a
+                        [routerLink]="imageItem.link"
+                        class="flex-shrink-0 w-64"
+                      >
+                        <div class="relative overflow-hidden group">
+                          <img
+                            [src]="imageItem.imageUrl"
+                            [alt]="imageItem.imageTitle"
+                            class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div class="absolute inset-0 flex items-end p-3">
+                            <h3 class="text-white text-lg">
+                              {{ imageItem.imageTitle }}
+                            </h3>
+                          </div>
+                        </div>
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
             </div>
           }
 
@@ -1767,15 +1808,16 @@ export class HeaderComponent {
       link: '/products',
       dropDown: true,
       children: [
-        { id: 11, title: 'Seating furniture', dropDown: false },
-        { id: 12, title: 'Spatial organisation', dropDown: false },
-        { id: 13, title: 'Tables', dropDown: false },
-        { id: 14, title: 'Accessories', dropDown: false },
-        { id: 15, title: 'Discover', dropDown: false },
-        { id: 16, title: 'Designer', dropDown: false },
-        { id: 17, title: 'Product finder', dropDown: false },
-        { id: 18, title: 'Service', dropDown: false },
-        { id: 19, title: 'Circular products', dropDown: false },
+        { id: 1, title: 'Seating furniture', dropDown: false },
+        { id: 2, title: 'Spatial organisation', dropDown: false },
+        { id: 3, title: 'Tables', dropDown: false },
+        { id: 4, title: 'Accessories', dropDown: false },
+        { id: 5, title: 'Discover', dropDown: false },
+        { id: 6, title: 'Designer', dropDown: false },
+        { id: 7, title: 'Product finder', dropDown: false },
+        { id: 8, title: 'Service', dropDown: false },
+        { id: 9, title: 'Circular products', dropDown: false },
+        { id: 10, title: '', dropDown: false, isGroupDivider: true },
       ],
     },
 
@@ -1785,44 +1827,154 @@ export class HeaderComponent {
       menuType: 'grouped',
       dropDown: true,
       children: [
-        { id: 21, title: 'Home', dropDown: false, isGroupHeader: true },
-        { id: 22, title: 'Living room', dropDown: false },
-        { id: 23, title: 'Dining room', dropDown: false },
-        { id: 24, title: 'Home Office', dropDown: false },
-        { id: 25, title: "Children's room", dropDown: false },
-        { id: 26, title: 'Outdoor', dropDown: false },
+        { id: 1, title: 'Home', dropDown: false, isGroupHeader: true },
+        { id: 2, title: 'Living room', dropDown: false },
+        { id: 3, title: 'Dining room', dropDown: false },
+        { id: 4, title: 'Home Office', dropDown: false },
+        { id: 5, title: "Children's room", dropDown: false },
+        { id: 6, title: 'Outdoor', dropDown: false },
 
-        { id: 27, title: '', dropDown: false, isGroupDivider: true },
+        { id: 7, title: '', dropDown: false, isGroupDivider: true },
 
-        { id: 28, title: 'Discover', dropDown: false, isGroupHeader: true },
-        { id: 29, title: 'Home Stories', dropDown: false },
-        { id: 30, title: 'Augmented Reality', dropDown: false },
-        { id: 31, title: 'Colours & materials', dropDown: false },
-        { id: 32, title: 'Home Selection', dropDown: false },
+        { id: 8, title: 'Discover', dropDown: false, isGroupHeader: true },
+        { id: 9, title: 'Home Stories', dropDown: false },
+        { id: 10, title: 'Augmented Reality', dropDown: false },
+        { id: 11, title: 'Colours & materials', dropDown: false },
+        { id: 12, title: 'Home Selection', dropDown: false },
 
-        { id: 33, title: '', dropDown: false, isGroupDivider: true },
+        { id: 13, title: '', dropDown: false, isGroupDivider: true },
 
         {
-          id: 34,
+          id: 14,
           title: 'Office spaces',
           dropDown: false,
           isGroupHeader: true,
         },
-        { id: 35, title: 'Workspace', dropDown: false },
-        { id: 36, title: 'Focus', dropDown: false },
-        { id: 37, title: 'Meeting', dropDown: false },
-        { id: 38, title: 'Workshop', dropDown: false },
+        { id: 15, title: 'Workspace', dropDown: false },
+        { id: 16, title: 'Focus', dropDown: false },
+        { id: 17, title: 'Meeting', dropDown: false },
+        { id: 18, title: 'Workshop', dropDown: false },
+
+        { id: 19, title: '', dropDown: false, isGroupDivider: true },
 
         {
-          id: 39,
+          id: 20,
           title: 'Vitra offices & concepts',
           dropDown: false,
           isGroupHeader: true,
         },
-        { id: 40, title: 'Club Office', dropDown: false },
-        { id: 41, title: 'Citizen Office', dropDown: false },
-        { id: 42, title: 'Studio Office', dropDown: false },
-        { id: 43, title: 'Dynamic Spaces', dropDown: false },
+        { id: 21, title: 'Club Office', dropDown: false },
+        { id: 22, title: 'Citizen Office', dropDown: false },
+        { id: 23, title: 'Studio Office', dropDown: false },
+        { id: 24, title: 'Dynamic Spaces', dropDown: false },
+
+        { id: 25, title: '', dropDown: false, isGroupDivider: true },
+
+        {
+          id: 26,
+          title: 'Public spaces',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 27, title: 'Hospitality', dropDown: false },
+        { id: 28, title: 'Airports', dropDown: false },
+        { id: 29, title: 'Education', dropDown: false },
+        { id: 30, title: 'Co-working', dropDown: false },
+        { id: 31, title: 'Healthcare', dropDown: false },
+
+        { id: 32, title: '', dropDown: false, isGroupDivider: true },
+
+        {
+          id: 33,
+          title: 'Themes',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 34, title: 'Our Clients', dropDown: false },
+        { id: 35, title: 'Destination Workplace', dropDown: false },
+        { id: 36, title: 'A case for classics', dropDown: false },
+        { id: 37, title: 'Office chairs', dropDown: false },
+        { id: 38, title: 'Dancing Office', dropDown: false },
+        { id: 39, title: '', dropDown: false, isGroupDivider: true },
+
+        {
+          id: 40,
+          title: 'Discover',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'Home Stories',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Home Stories',
+          link: '/home-stories',
+        },
+        {
+          id: 2,
+          title: 'The Home Selection fabrics from Kvadrat and Dedar',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'The Home Selection fabrics from Kvadrat and Dedar',
+          link: '/home-selection-fabrics',
+        },
+        {
+          id: 3,
+          title: 'Augmented Reality - bring Vitra products into your home',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Augmented Reality - bring Vitra products into your home',
+          link: '/augmented-reality',
+        },
+        {
+          id: 4,
+          title: 'School of Design: Showcase work and knowledge',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'School of Design: Showcase work and knowledge',
+          link: '/school-design',
+        },
+        {
+          id: 5,
+          title: 'A case for classics',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'A case for classics',
+          link: '/classic',
+        },
+        {
+          id: 6,
+          title: 'Colour & material',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Colour & material',
+          link: '/colour-material',
+        },
+        {
+          id: 7,
+          title: 'An open house',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'An open house',
+          link: '/open-house',
+        },
+        {
+          id: 8,
+          title: 'An office landscape - without walls or partitions',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'An office landscape - without walls or partitions',
+          link: '/landscape',
+        },
+        {
+          id: 9,
+          title: 'High comfort of low energy',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'High comfort of low energy',
+          link: '/comfort',
+        },
+        {
+          id: 10,
+          title: 'A leading space for a leading art college',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'A leading space for a leading art college',
+          link: '/leading-space',
+        },
       ],
     },
     {
@@ -1830,35 +1982,458 @@ export class HeaderComponent {
       title: 'Services',
       link: '/services',
       dropDown: true,
-      children: [],
+      children: [
+        {
+          id: 1,
+          title: 'Product services',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 2, title: 'Care & repair', dropDown: false },
+        { id: 3, title: 'Care products', dropDown: false },
+        { id: 4, title: 'Manufacturer warranty', dropDown: false },
+        { id: 5, title: 'FAQ and contact', dropDown: false },
+        { id: 6, title: 'Instructions', dropDown: false },
+
+        { id: 7, title: '', dropDown: false, isGroupDivider: true },
+
+        {
+          id: 8,
+          title: 'Office planning',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 9, title: 'Consulting & Planning Studio', dropDown: false },
+        { id: 10, title: '', dropDown: false, isGroupDivider: true },
+
+        {
+          id: 11,
+          title: 'Circular products',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 12, title: 'Vitra Circle Stores', dropDown: false },
+        { id: 13, title: '', dropDown: false, isGroupDivider: true },
+        { id: 14, title: '', dropDown: false, isGroupDivider: true },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'Our Clients',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Our Clients',
+          link: '/clients',
+        },
+        {
+          id: 2,
+          title: 'Mynt',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Mynt',
+          link: '/mynt',
+        },
+        {
+          id: 3,
+          title: 'Destination Workplace: Visit our clients and partners',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Destination Workplace: Visit our clients and partners',
+          link: '/destination',
+        },
+        {
+          id: 4,
+          title: 'Anagram Sofa',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Anagram Sofa',
+          link: '/anagram',
+        },
+        {
+          id: 5,
+          title: 'Mikado',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Mikado',
+          link: '/mikado',
+        },
+        {
+          id: 6,
+          title: 'Tyde 2 on castors',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Tyde 2 on castors',
+          link: '/tyde',
+        },
+        {
+          id: 7,
+          title: 'ACX',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'ACX',
+          link: '/acx',
+        },
+        {
+          id: 8,
+          title: 'Dancing Office',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Dancing Office',
+          link: '/dancing-office',
+        },
+        {
+          id: 9,
+          title: 'Office chairs',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Office chairs',
+          link: '/office-chairs',
+        },
+      ],
     },
     {
       id: 4,
       title: 'Professionals',
       link: '/professionals',
       dropDown: true,
-      children: [],
+      children: [
+        {
+          id: 1,
+          title: 'Downloads',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 2, title: 'CAD data', dropDown: false },
+        { id: 3, title: 'Product factsheets', dropDown: false },
+        { id: 4, title: 'Certificates', dropDown: false },
+        { id: 5, title: 'Sustainability report', dropDown: false },
+        { id: 6, title: 'Instructions', dropDown: false },
+        { id: 7, title: 'Ecology information', dropDown: false },
+
+        { id: 8, title: '', dropDown: false, isGroupDivider: true },
+
+        { id: 9, title: 'Tools', dropDown: false, isGroupHeader: true },
+        { id: 10, title: 'pCon', dropDown: false },
+        { id: 11, title: 'Planning examples', dropDown: false },
+        { id: 12, title: 'Colour & Material Library', dropDown: false },
+        { id: 13, title: 'Certificates and standards', dropDown: false },
+        { id: 14, title: 'Home Selection', dropDown: false },
+        { id: 15, title: '', dropDown: false, isGroupDivider: true },
+
+        { id: 16, title: 'Dealer', dropDown: false, isGroupHeader: true },
+        { id: 17, title: 'To the dealer login', dropDown: false },
+        { id: 18, title: '', dropDown: false, isGroupDivider: true },
+
+        { id: 19, title: 'Dealer', dropDown: false, isGroupHeader: true },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'Consulting & planning in the VitraHaus',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Consulting & planning in the VitraHaus',
+          link: '/consulting',
+        },
+        {
+          id: 2,
+          title: 'Instructions',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Instructions',
+          link: '/instructions',
+        },
+        {
+          id: 3,
+          title: 'Outdoor care instructions',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Outdoor care instructions',
+          link: '/outdoor',
+        },
+        {
+          id: 4,
+          title:
+            'Repair, maintenance, overhaul at the Vitra Circle Store Campus',
+          imageUrl: '/categories.jpg',
+          imageTitle:
+            'Repair, maintenance, overhaul at the Vitra Circle Store Campus',
+          link: '/repair',
+        },
+      ],
     },
     {
       id: 5,
       title: 'Magazine',
       link: '/magazine',
       dropDown: true,
-      children: [],
+      children: [
+        {
+          id: 1,
+          title: 'Categories',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 2, title: 'Stories', dropDown: false },
+        { id: 3, title: 'Conversations', dropDown: false },
+        { id: 4, title: 'Exhibitions', dropDown: false },
+        { id: 5, title: 'Designer', dropDown: false },
+        { id: 6, title: '', dropDown: false, isGroupDivider: true },
+        { id: 7, title: 'Article', dropDown: false, isGroupHeader: true },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'Project Vitra',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Project Vitra',
+          link: '/project',
+        },
+        {
+          id: 2,
+          title: 'Mynt is a lifetime achievement to me',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Mynt is a lifetime achievement to me',
+          link: '/mynt',
+        },
+        {
+          id: 3,
+          title: 'A desk like a typeface',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'A desk like a typeface',
+          link: '/desk',
+        },
+        {
+          id: 4,
+          title: 'V-Foam',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'V-Foam',
+          link: '/v-foam',
+        },
+        {
+          id: 5,
+          title: 'Sculptural Icons',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Sculptural Icons',
+          link: '/sculptural',
+        },
+        {
+          id: 6,
+          title: 'Game bring people together - just like good offices',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Game bring people together - just like good offices',
+          link: '/game',
+        },
+        {
+          id: 7,
+          title: 'Let there be light!',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Let there be light!',
+          link: '/let-light',
+        },
+        {
+          id: 8,
+          title: 'Social Seating',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Social Seating',
+          link: '/social-seating',
+        },
+        {
+          id: 9,
+          title: 'Just Do It!',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Just Do It!',
+          link: '/just-do-it',
+        },
+        {
+          id: 10,
+          title: 'EVER GREEN',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'EVER GREEN',
+          link: '/evergreen',
+        },
+        {
+          id: 11,
+          title: 'Why the Eames La Fonda Chair was dxesigned',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Why the Eames La Fonda Chair was dxesigned',
+          link: '/chair-designed',
+        },
+        {
+          id: 12,
+          title: 'When a Sofa is more than just a Sofa: Anagram',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'When a Sofa is more than just a Sofa: Anagram',
+          link: '/sofa-more',
+        },
+        {
+          id: 13,
+          title: '100% virgin wool - 100% recyclable',
+          imageUrl: '/categories.jpg',
+          imageTitle: '100% virgin wool - 100% recyclable',
+          link: '/virgin-wool',
+        },
+        {
+          id: 14,
+          title: 'An archive is like a time capsule',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'An archive is like a time capsule',
+          link: '/archive',
+        },
+        {
+          id: 15,
+          title: 'VitraHaus Loft - A conversation with Sabine Marcelis',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'VitraHaus Loft - A conversation with Sabine Marcelis',
+          link: '/vitrahaus-loft',
+        },
+        {
+          id: 16,
+          title: 'A 1000 m2 piece of furniture',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'A 1000 m2 piece of furniture',
+          link: '/1000m',
+        },
+        {
+          id: 17,
+          title: 'From a toy to an object',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'From a toy to an object',
+          link: '/toy-to-object',
+        },
+        {
+          id: 18,
+          title: 'The Eames Collection at the Vitra Design Museum',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'The Eames Collection at the Vitra Design Museum',
+          link: '/museum',
+        },
+        {
+          id: 19,
+          title: 'About the partnership between Eames and Vitra',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'About the partnership between Eames and Vitra',
+          link: '/about',
+        },
+      ],
     },
     {
       id: 6,
       title: 'Vitra Campus',
       link: '/campus',
       dropDown: true,
-      children: [],
+      children: [
+        {
+          id: 1,
+          title: 'Discover',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+        { id: 2, title: 'Exhibitions', dropDown: false },
+        { id: 3, title: 'Guided tours & workshops', dropDown: false },
+        { id: 4, title: 'Food and drink', dropDown: false },
+        { id: 5, title: 'Shopping', dropDown: false },
+        { id: 6, title: 'Activities for families', dropDown: false },
+        { id: 7, title: 'Architecture', dropDown: false },
+        { id: 8, title: 'Your event', dropDown: false },
+        {
+          id: 9,
+          title: 'Consulting & planning in the VitraHaus',
+          dropDown: false,
+        },
+
+        { id: 10, title: '', dropDown: false, isGroupDivider: true },
+        {
+          id: 11,
+          title: 'Visitor information',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+
+        { id: 12, title: 'Plan your visit', dropDown: false },
+        { id: 13, title: 'Vitra Campus app', dropDown: false },
+        { id: 14, title: 'Campus Events', dropDown: false },
+        { id: 15, title: 'News', dropDown: false },
+
+        { id: 16, title: '', dropDown: false, isGroupDivider: true },
+        { id: 17, title: 'Highlights', dropDown: false, isGroupHeader: true },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'VitraHaus',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'VitraHaus',
+          link: '/vitrahaus',
+        },
+        {
+          id: 2,
+          title: 'Vitra Design Museum',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Vitra Design Museum',
+          link: '/museum',
+        },
+        {
+          id: 3,
+          title: 'Vitra Schaudepot',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Vitra Schaudepot',
+          link: '/schaudepot',
+        },
+        {
+          id: 4,
+          title: 'Vitra Circle Store Campus',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Vitra Circle Store Campus',
+          link: '/circle-store',
+        },
+        {
+          id: 5,
+          title: 'Oudolf Garten',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Oudolf Garten',
+          link: '/oudolf-garde ',
+        },
+      ],
     },
     {
       id: 7,
       title: 'About Vitra',
       link: '/about',
       dropDown: true,
-      children: [],
+      children: [
+        {
+          id: 1,
+          title: 'Discover',
+          dropDown: false,
+          isGroupHeader: true,
+        },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'Sustainability',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Sustainability',
+          link: '/sustainability',
+        },
+        {
+          id: 2,
+          title: 'Jobs & Careers',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Jobs & Careers',
+          link: '/jobs',
+        },
+        {
+          id: 3,
+          title: 'Design process',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Design process',
+          link: '/design-process',
+        },
+        {
+          id: 4,
+          title: 'The Original is by Vitra',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'The Original is by Vitra',
+          link: '/original',
+        },
+        {
+          id: 5,
+          title: 'History - Project Vitra',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'History - Project Vitra',
+          link: '/history ',
+        },
+      ],
     },
   ];
 }
