@@ -32,7 +32,8 @@ interface NavItem {
   dropDown: boolean;
   children?: NavChild[];
   imageItems?: NavImageItem[];
-  menuType?: 'simple' | 'grouped';
+  menuType?: 'simple' | 'grouped' | 'mixed';
+  imageLayout?: 'horizontal' | 'vertical';
 }
 
 interface NavChild {
@@ -240,21 +241,35 @@ interface NavImageItem {
                 selectedParent()!.imageItems &&
                 selectedParent()!.imageItems!.length > 0
               ) {
-                <div class="overflow-x-auto -mx-5 px-5">
-                  <div class="flex gap-4">
+                <div class="overflow-x-auto">
+                  <div
+                    [class]="
+                      selectedParent()!.imageLayout === 'vertical'
+                        ? 'flex flex-col gap-4'
+                        : 'flex gap-4'
+                    "
+                  >
                     @for (
                       imageItem of selectedParent()!.imageItems;
                       track imageItem.id
                     ) {
                       <a
                         [routerLink]="imageItem.link"
-                        class="flex-shrink-0 w-64"
+                        [class]="
+                          selectedParent()!.imageLayout === 'vertical'
+                            ? 'w-full'
+                            : 'flex-shrink-0 w-64'
+                        "
                       >
                         <div class="relative overflow-hidden group">
                           <img
                             [src]="imageItem.imageUrl"
                             [alt]="imageItem.imageTitle"
-                            class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                            [class]="
+                              selectedParent()!.id === 1
+                                ? 'w-full object-cover aspect-[16/9] transition-transform duration-500 group-hover:scale-110'
+                                : 'w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110'
+                            "
                           />
                           <div class="absolute inset-0 flex items-end p-3">
                             <h3 class="text-white text-lg">
@@ -1807,6 +1822,7 @@ export class HeaderComponent {
       title: 'Products',
       link: '/products',
       dropDown: true,
+      imageLayout: 'vertical',
       children: [
         { id: 1, title: 'Seating furniture', dropDown: false },
         { id: 2, title: 'Spatial organisation', dropDown: false },
@@ -1818,6 +1834,20 @@ export class HeaderComponent {
         { id: 8, title: 'Service', dropDown: false },
         { id: 9, title: 'Circular products', dropDown: false },
         { id: 10, title: '', dropDown: false, isGroupDivider: true },
+      ],
+      imageItems: [
+        {
+          id: 1,
+          title: 'Mynt: sit differently',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Mynt: sit differently',
+        },
+        {
+          id: 2,
+          title: 'Antony Limited Edition 2025',
+          imageUrl: '/categories.jpg',
+          imageTitle: 'Antony Limited Edition 2025',
+        },
       ],
     },
 
