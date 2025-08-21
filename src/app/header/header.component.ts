@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DropdownService } from './dropdown.service';
+import { HostListener } from '@angular/core';
 
 interface MenuIconList {
   id: number;
@@ -62,874 +63,888 @@ interface NavImageItem {
   selector: 'app-header',
   imports: [CommonModule, MatIconModule, RouterLink, FormsModule],
   template: `
-    <div class="relative">
-      <header
-        class="px-5 bg-white z-50 isolate m-auto max-w-7xl py-3 flex flex-col lg:px-0"
-      >
-        <div
-          class="hidden lg:flex justify-end gap-4 text-gray-400"
-          (click)="closeDropdown()"
+    <div>
+      <div class="relative z-50 bg-white">
+        <header
+          class="px-5 bg-white z-50 m-auto max-w-7xl py-3 flex flex-col lg:px-0"
         >
-          <a
-            routerLink="/find-vitra"
-            class="hover:text-red-600 flex items-center"
-          >
-            <mat-icon>location_on</mat-icon>
-            Find Vitra
-          </a>
-          <a routerLink="/contact" class="hover:text-red-600">Contact</a>
-        </div>
-
-        <div class="flex justify-between items-baseline">
-          <div class="flex items-baseline gap-4">
-            <button class="lg:hidden" (click)="toggleMenu()">
-              <mat-icon>menu</mat-icon>
-            </button>
-
-            <a routerLink="/" class="hidden lg:block text-4xl font-bold">
-              vitra.
-            </a>
-            <ul class="hidden lg:flex gap-6">
-              @for (item of NavList; track item.id) {
-                <li>
-                  <!--                  routerlink routerlinkAcitve routerlinkActivaOptions-->
-                  <a
-                    [routerLink]="item.link"
-                    class="hover:text-red-600"
-                    (mouseenter)="
-                      item.dropDown
-                        ? dropdownService.setActiveDropdown(item.title)
-                        : null
-                    "
-                  >
-                    {{ item.title }}
-                  </a>
-                </li>
-              }
-            </ul>
-          </div>
-
-          <a routerLink="/" class="text-4xl font-bold lg:hidden">vitra.</a>
-
-          <div class="flex gap-3">
-            <a routerLink="/search" class="hover:text-red-600">
-              <mat-icon>search</mat-icon>
-            </a>
-            <div class="relative group hidden lg:block">
-              <a routerLink="/person" class="hover:text-red-600">
-                <mat-icon>person</mat-icon>
-              </a>
-              <div
-                class="absolute top-full -right-12 mt-2 w-80 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
-              >
-                <a
-                  routerLink="/login"
-                  class="block px-6 py-4 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-200"
-                >
-                  <span class="text-lg">Login</span>
-                </a>
-                <a
-                  routerLink="/dealer-login"
-                  class="block px-6 py-4 text-gray-700 hover:bg-gray-50 transition-colors"
-                >
-                  <span class="text-lg">Dealer Login</span>
-                </a>
-              </div>
-            </div>
-
-            <div class="relative group hidden lg:block">
-              <a routerLink="/language" class="hover:text-red-600">
-                <mat-icon>language</mat-icon>
-              </a>
-              <div
-                class="absolute top-full right-0 p-6 mt-2 w-80 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
-              >
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">
-                  Location & Language
-                </h3>
-                <div class="mb-4">
-                  <div
-                    class="border border-gray-300 rounded p-3 flex items-center justify-between cursor-pointer hover:border-gray-400"
-                  >
-                    <div class="flex items-center gap-2">
-                      <mat-icon class="text-gray-500">public</mat-icon>
-                      <span class="text-gray-700">Others in Asia</span>
-                    </div>
-                    <mat-icon class="text-gray-400"
-                      >keyboard_arrow_down</mat-icon
-                    >
-                  </div>
-                </div>
-                <button
-                  class="w-full bg-gray-700 text-white py-3 rounded hover:bg-gray-800 transition-colors"
-                >
-                  SELECT
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      @if (isMenuOpen()) {
-        <nav class="lg:hidden fixed inset-0 bg-white z-50 overflow-y-auto">
           <div
-            class="flex justify-between items-baseline py-3 px-5 border-b border-b-gray-300"
+            class="hidden lg:flex justify-end gap-4 text-gray-400"
+            (click)="closeDropdown()"
           >
-            <div (click)="closeMenu()">
-              <mat-icon>close</mat-icon>
-            </div>
-            <div>
-              <a routerLink="/" class="text-4xl font-bold"> vitra.</a>
-            </div>
-            <div>
-              <mat-icon>search</mat-icon>
-            </div>
+            <a
+              routerLink="/find-vitra"
+              class="hover:text-red-600 flex items-center"
+            >
+              <mat-icon>location_on</mat-icon>
+              Find Vitra
+            </a>
+            <a routerLink="/contact" class="hover:text-red-600">Contact</a>
           </div>
 
-          @if (showSubmenu()) {
-            <div
-              class="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-200"
-            >
-              <button
-                (click)="goBack()"
-                class="flex items-center text-gray-600 hover:text-black"
-              >
-                <mat-icon>arrow_back_ios</mat-icon>
+          <div class="flex justify-between items-baseline">
+            <div class="flex items-baseline gap-4">
+              <button class="lg:hidden" (click)="toggleMenu()">
+                <mat-icon>menu</mat-icon>
               </button>
-              <div class="text-xl ">
-                {{ selectedParent()?.title }}
-              </div>
-              <div></div>
-            </div>
-          }
 
-          @if (!showSubmenu()) {
-            <div class="px-5 pb-0">
-              <ul class="flex flex-col gap-8 py-6">
+              <a routerLink="/" class="hidden lg:block text-4xl font-bold">
+                vitra.
+              </a>
+              <ul class="hidden lg:flex gap-6">
                 @for (item of NavList; track item.id) {
-                  <a
-                    [routerLink]="item.link"
-                    class="block  text-xl hover:text-red-600"
-                    (click)="openSubmenu(item)"
-                  >
-                    <li class="flex justify-between items-center">
-                      {{ item.title }}
-
-                      <mat-icon>arrow_forward</mat-icon>
-                    </li>
-                  </a>
-                }
-              </ul>
-            </div>
-          }
-
-          @if (showSubmenu() && selectedParent()) {
-            <div class="px-5">
-              <ul class="flex flex-col gap-6 pt-6">
-                @for (child of selectedParent()!.children; track child.id) {
-                  @if (child.isGroupHeader) {
-                    <li class="text-gray-500 text-sm font-medium mt-4">
-                      {{ child.title }}
-                    </li>
-                  } @else if (child.isGroupDivider) {
-                    <li class="border-t border-gray-300"></li>
-                  } @else {
-                    <li class="flex justify-between items-center">
-                      <a
-                        class="block text-xl hover:text-red-600 cursor-pointer"
-                      >
-                        {{ child.title }}
-                      </a>
-                    </li>
-                  }
-                }
-              </ul>
-
-              @if (
-                selectedParent()!.imageItems &&
-                selectedParent()!.imageItems!.length > 0
-              ) {
-                <div class="overflow-x-auto">
-                  <div
-                    [class]="
-                      selectedParent()!.imageLayout === 'vertical'
-                        ? 'flex flex-col gap-4'
-                        : 'flex gap-4'
-                    "
-                  >
-                    @for (
-                      imageItem of selectedParent()!.imageItems;
-                      track imageItem.id
-                    ) {
-                      <a
-                        [routerLink]="imageItem.link"
-                        class="py-3"
-                        [class]="
-                          selectedParent()!.imageLayout === 'vertical'
-                            ? 'w-full'
-                            : 'flex-shrink-0 w-64'
-                        "
-                      >
-                        <div class="relative overflow-hidden group">
-                          <img
-                            [src]="imageItem.imageUrl"
-                            [alt]="imageItem.imageTitle"
-                            [class]="
-                              selectedParent()!.id === 1
-                                ? 'w-full object-cover aspect-[16/9] transition-transform duration-500 group-hover:scale-110'
-                                : 'w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110'
-                            "
-                          />
-                          <div class="absolute inset-0 flex items-end p-3">
-                            <h3 class="text-white text-lg">
-                              {{ imageItem.imageTitle }}
-                            </h3>
-                          </div>
-                        </div>
-                      </a>
-                    }
-                  </div>
-                </div>
-              }
-            </div>
-          }
-
-          <div class="bg-gray-200 py-20">
-            <div class="px-5">
-              <ul class="flex flex-col gap-6">
-                @for (item of menuIconItems; track item.id) {
-                  <li class="flex justify-between items-center">
+                  <li>
+                    <!--                  routerlink routerlinkAcitve routerlinkActivaOptions-->
                     <a
                       [routerLink]="item.link"
-                      class="flex items-center gap-2 text-xl hover:text-red-600"
-                      (click)="closeMenu()"
+                      class="hover:text-red-600"
+                      (mouseenter)="
+                        item.dropDown
+                          ? dropdownService.setActiveDropdown(item.title)
+                          : null
+                      "
                     >
-                      <mat-icon>{{ item.icon }}</mat-icon>
                       {{ item.title }}
                     </a>
                   </li>
                 }
               </ul>
             </div>
-          </div>
-        </nav>
-      }
 
-      @if (activeDropdown()) {
-        <div
-          class="absolute top-full left-0 right-0 w-full z-40 bg-white border-t"
-          (mouseenter)="setActiveDropdown(activeDropdown()!)"
-        >
-          <div class="max-w-7xl mx-auto py-8">
-            @switch (dropdownService.activeDropdown()) {
-              @case ('Products') {
-                <div class="grid grid-cols-6 gap-6">
-                  <div>
-                    <h3 class="text-gray-400">Seating furniture</h3>
-                    <!--                    TODO: use margin top instead margin bottom done-->
-                    <ul class="flex flex-col gap-1">
-                      @for (item of seatingFurnitureItems; track item.id) {
-                        <!--                        TODO: hover should have cursor-pointer indicator done-->
-                        <!--                        TODO: if is the space between items, use gap is better then padding top done-->
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                    <h3 class="text-gray-400 mt-8">Spatial organisation</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of spatialItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
+            <a routerLink="/" class="text-4xl font-bold lg:hidden">vitra.</a>
+
+            <div class="flex gap-3">
+              <a routerLink="/search" class="hover:text-red-600">
+                <mat-icon>search</mat-icon>
+              </a>
+              <div class="relative group hidden lg:block">
+                <a routerLink="/person" class="hover:text-red-600">
+                  <mat-icon>person</mat-icon>
+                </a>
+                <div
+                  class="absolute top-full -right-12 mt-2 w-80 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
+                >
+                  <a
+                    routerLink="/login"
+                    class="block px-6 py-4 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-200"
+                  >
+                    <span class="text-lg">Login</span>
+                  </a>
+                  <a
+                    routerLink="/dealer-login"
+                    class="block px-6 py-4 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <span class="text-lg">Dealer Login</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="relative group hidden lg:block">
+                <a routerLink="/language" class="hover:text-red-600">
+                  <mat-icon>language</mat-icon>
+                </a>
+                <div
+                  class="absolute top-full right-0 p-6 mt-2 w-80 bg-white opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50"
+                >
+                  <h3 class="text-lg font-semibold text-gray-700 mb-4">
+                    Location & Language
+                  </h3>
+                  <div class="mb-4">
+                    <div
+                      class="border border-gray-300 rounded p-3 flex items-center justify-between cursor-pointer hover:border-gray-400"
+                    >
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500">public</mat-icon>
+                        <span class="text-gray-700">Others in Asia</span>
+                      </div>
+                      <mat-icon class="text-gray-400"
+                        >keyboard_arrow_down</mat-icon
+                      >
+                    </div>
                   </div>
-                  <div>
-                    <h3 class="text-gray-400">Tables</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of TablesItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                    <h3 class="text-gray-400 mt-8">Accessories</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of accessoriesItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                      <li class="text-base text-gray-400">
-                        <a
-                          routerLink="/more"
-                          class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
-                          >More</a
-                        >
+                  <button
+                    class="w-full bg-gray-700 text-white py-3 rounded hover:bg-gray-800 transition-colors"
+                  >
+                    SELECT
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        @if (isMenuOpen()) {
+          <nav class="lg:hidden fixed inset-0 bg-white z-50 overflow-y-auto">
+            <div
+              class="flex justify-between items-baseline py-3 px-5 border-b border-b-gray-300"
+            >
+              <div (click)="closeMenu()">
+                <mat-icon>close</mat-icon>
+              </div>
+              <div>
+                <a routerLink="/" class="text-4xl font-bold"> vitra.</a>
+              </div>
+              <div>
+                <mat-icon>search</mat-icon>
+              </div>
+            </div>
+
+            @if (showSubmenu()) {
+              <div
+                class="flex items-center justify-between px-5 py-3 bg-gray-50 border-b border-gray-200"
+              >
+                <button
+                  (click)="goBack()"
+                  class="flex items-center text-gray-600 hover:text-black"
+                >
+                  <mat-icon>arrow_back_ios</mat-icon>
+                </button>
+                <div class="text-xl ">
+                  {{ selectedParent()?.title }}
+                </div>
+                <div></div>
+              </div>
+            }
+
+            @if (!showSubmenu()) {
+              <div class="px-5 pb-0">
+                <ul class="flex flex-col gap-8 py-6">
+                  @for (item of NavList; track item.id) {
+                    <a
+                      [routerLink]="item.link"
+                      class="block  text-xl hover:text-red-600"
+                      (click)="openSubmenu(item)"
+                    >
+                      <li class="flex justify-between items-center">
+                        {{ item.title }}
+
+                        <mat-icon>arrow_forward</mat-icon>
                       </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 class="text-gray-400">Discover</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of productDiscoverItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                    <h3 class="text-gray-400 mt-8">Designer</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of designerItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                      <li class="text-base text-gray-400">
-                        <a
-                          routerLink="/more"
-                          class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
-                          >More</a
-                        >
+                    </a>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (showSubmenu() && selectedParent()) {
+              <div class="px-5">
+                <ul class="flex flex-col gap-6 pt-6">
+                  @for (child of selectedParent()!.children; track child.id) {
+                    @if (child.isGroupHeader) {
+                      <li class="text-gray-500 text-sm font-medium mt-4">
+                        {{ child.title }}
                       </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 class="text-gray-400">Product finder</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of finderItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                    <h3 class="text-gray-400 mt-8">Service</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of serviceItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                    <h3 class="text-gray-400 mt-8">Circular products</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of circularItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div class="col-span-2 flex flex-col gap-4">
-                    @for (item of productImage; track item.id) {
-                      <!--                      TODO: why here need to use group 有文字在那邊需要group才能動p-->
-                      <div class="relative overflow-hidden group">
-                        <a [routerLink]="item.link">
-                          <img
-                            class="w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            [alt]="item.title"
-                            [src]="item.image"
-                          />
+                    } @else if (child.isGroupDivider) {
+                      <li class="border-t border-gray-300"></li>
+                    } @else {
+                      <li class="flex justify-between items-center">
+                        <a
+                          class="block text-xl hover:text-red-600 cursor-pointer"
+                        >
+                          {{ child.title }}
                         </a>
-                        <div class="absolute inset-0 flex items-end p-3">
-                          <h3 class="text-white text-lg">
-                            {{ item.title }}
+                      </li>
+                    }
+                  }
+                </ul>
+
+                @if (
+                  selectedParent()!.imageItems &&
+                  selectedParent()!.imageItems!.length > 0
+                ) {
+                  <div class="overflow-x-auto">
+                    <div
+                      [class]="
+                        selectedParent()!.imageLayout === 'vertical'
+                          ? 'flex flex-col gap-4'
+                          : 'flex gap-4'
+                      "
+                    >
+                      @for (
+                        imageItem of selectedParent()!.imageItems;
+                        track imageItem.id
+                      ) {
+                        <a
+                          [routerLink]="imageItem.link"
+                          class="py-3"
+                          [class]="
+                            selectedParent()!.imageLayout === 'vertical'
+                              ? 'w-full'
+                              : 'flex-shrink-0 w-64'
+                          "
+                        >
+                          <div class="relative overflow-hidden group">
+                            <img
+                              [src]="imageItem.imageUrl"
+                              [alt]="imageItem.imageTitle"
+                              [class]="
+                                selectedParent()!.id === 1
+                                  ? 'w-full object-cover aspect-[16/9] transition-transform duration-500 group-hover:scale-110'
+                                  : 'w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110'
+                              "
+                            />
+                            <div class="absolute inset-0 flex items-end p-3">
+                              <h3 class="text-white text-lg">
+                                {{ imageItem.imageTitle }}
+                              </h3>
+                            </div>
+                          </div>
+                        </a>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <div class="bg-gray-200 py-20">
+              <div class="px-5">
+                <ul class="flex flex-col gap-6">
+                  @for (item of menuIconItems; track item.id) {
+                    <li class="flex justify-between items-center">
+                      <a
+                        [routerLink]="item.link"
+                        class="flex items-center gap-2 text-xl hover:text-red-600"
+                        (click)="closeMenu()"
+                      >
+                        <mat-icon>{{ item.icon }}</mat-icon>
+                        {{ item.title }}
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </nav>
+        }
+
+        @if (activeDropdown()) {
+          <div
+            class="absolute top-full left-0 right-0 w-full z-40 bg-white border-t"
+            (mouseenter)="setActiveDropdown(activeDropdown()!)"
+          >
+            <div class="max-w-7xl mx-auto py-8">
+              @switch (dropdownService.activeDropdown()) {
+                @case ('Products') {
+                  <div class="grid grid-cols-6 gap-6">
+                    <div>
+                      <h3 class="text-gray-400">Seating furniture</h3>
+                      <!--                    TODO: use margin top instead margin bottom done-->
+                      <ul class="flex flex-col gap-1">
+                        @for (item of seatingFurnitureItems; track item.id) {
+                          <!--                        TODO: hover should have cursor-pointer indicator done-->
+                          <!--                        TODO: if is the space between items, use gap is better then padding top done-->
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                      <h3 class="text-gray-400 mt-8">Spatial organisation</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of spatialItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 class="text-gray-400">Tables</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of TablesItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                      <h3 class="text-gray-400 mt-8">Accessories</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of accessoriesItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                        <li class="text-base text-gray-400">
+                          <a
+                            routerLink="/more"
+                            class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                            >More</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 class="text-gray-400">Discover</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of productDiscoverItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                      <h3 class="text-gray-400 mt-8">Designer</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of designerItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                        <li class="text-base text-gray-400">
+                          <a
+                            routerLink="/more"
+                            class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                            >More</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 class="text-gray-400">Product finder</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of finderItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                      <h3 class="text-gray-400 mt-8">Service</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of serviceItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                      <h3 class="text-gray-400 mt-8">Circular products</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of circularItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                    <div class="col-span-2 flex flex-col gap-4">
+                      @for (item of productImage; track item.id) {
+                        <!--                      TODO: why here need to use group 有文字在那邊需要group才能動p-->
+                        <div class="relative overflow-hidden group">
+                          <a [routerLink]="item.link">
+                            <img
+                              class="w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                              [alt]="item.title"
+                              [src]="item.image"
+                            />
+                          </a>
+                          <div class="absolute inset-0 flex items-end p-3">
+                            <h3 class="text-white text-lg">
+                              {{ item.title }}
+                            </h3>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+                @case ('Inspirations') {
+                  <div class="grid grid-cols-6 gap-8">
+                    <div class="col-span-3">
+                      <div class="grid grid-cols-3 gap-8">
+                        <div>
+                          <h3 class="text-gray-400">Home</h3>
+                          <ul class="flex flex-col gap-1">
+                            @for (item of homeItems; track item.id) {
+                              <li class="text-lg">
+                                <a
+                                  [routerLink]="item.link"
+                                  class="hover:text-red-600"
+                                  >{{ item.title }}</a
+                                >
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                        <div>
+                          <h3 class="text-gray-400">Office spaces</h3>
+                          <ul class="flex flex-col gap-1">
+                            @for (item of officeItems; track item.id) {
+                              <li class="text-lg">
+                                <a
+                                  [routerLink]="item.link"
+                                  class="hover:text-red-600"
+                                  >{{ item.title }}</a
+                                >
+                              </li>
+                            }
+                            <li class="text-base text-gray-400">
+                              <a
+                                routerLink="/more"
+                                class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                                >More</a
+                              >
+                            </li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h3 class="text-gray-400">Public spaces</h3>
+                          <ul class="flex flex-col gap-1">
+                            @for (item of publicItems; track item.id) {
+                              <li class="text-lg">
+                                <a
+                                  [routerLink]="item.link"
+                                  class="hover:text-red-600"
+                                  >{{ item.title }}</a
+                                >
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                        <div>
+                          <h3 class="text-gray-400">Discover</h3>
+                          <ul class="flex flex-col gap-1">
+                            @for (item of homeStoriesItems; track item.id) {
+                              <li class="text-lg">
+                                <a
+                                  [routerLink]="item.link"
+                                  class="hover:text-red-600"
+                                  >{{ item.title }}</a
+                                >
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                        <div>
+                          <h3 class="text-gray-400">
+                            Vitra offices & concepts
                           </h3>
+                          <ul class="flex flex-col gap-1">
+                            @for (item of vitraItems; track item.id) {
+                              <li class="text-lg">
+                                <a
+                                  [routerLink]="item.link"
+                                  class="hover:text-red-600"
+                                  >{{ item.title }}</a
+                                >
+                              </li>
+                            }
+                            <li class="text-base text-gray-400">
+                              <a
+                                routerLink="/more"
+                                class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                                >More</a
+                              >
+                            </li>
+                          </ul>
+                        </div>
+                        <div>
+                          <h3 class="text-gray-400">Themes</h3>
+                          <ul class="flex flex-col gap-1">
+                            @for (item of themesItems; track item.id) {
+                              <li class="text-lg">
+                                <a
+                                  [routerLink]="item.link"
+                                  class="hover:text-red-600"
+                                  >{{ item.title }}</a
+                                >
+                              </li>
+                            }
+                          </ul>
                         </div>
                       </div>
+                    </div>
+                    <div class="col-span-3">
+                      <div class="flex justify-between items-start">
+                        <h3 class="text-gray-400">Discover</h3>
+                        <div class="text-gray-200">
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollLeft()"
+                            >arrow_back_ios</mat-icon
+                          >
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollRight()"
+                            >arrow_forward_ios</mat-icon
+                          >
+                        </div>
+                      </div>
+                      <div class="overflow-x-auto scrollbar-hide">
+                        <div class="flex gap-6 w-max">
+                          @for (item of inspirationsImage; track item.id) {
+                            <a routerLink="item.link">
+                              <div
+                                class="relative flex-shrink-0 w-64 overflow-hidden group"
+                              >
+                                <img
+                                  [src]="item.image"
+                                  [alt]="item.title"
+                                  class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div
+                                  class="absolute inset-0 flex items-end p-3"
+                                >
+                                  <h3 class="text-white text-lg">
+                                    {{ item.title }}
+                                  </h3>
+                                </div>
+                              </div>
+                            </a>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                @case ('Services') {
+                  <div class="grid grid-cols-5 gap-6">
+                    <div>
+                      <h3 class="text-gray-400">Product services</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of productServicesItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class=" hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 class="text-gray-400">Office planning</h3>
+                      <ul class="flex flex-col gap-1">
+                        <li class="text-lg">
+                          <a routerLink="/studio" class=" hover:text-red-600"
+                            >Consulting & Planning Studio</a
+                          >
+                        </li>
+                      </ul>
+                      <h3 class="text-gray-400 mt-9">Circular Products</h3>
+                      <ul class="flex flex-col gap-1">
+                        <li class="text-lg">
+                          <a
+                            routerLink="/circle-stores"
+                            class=" hover:text-red-600"
+                            >Vitra Circle Stores</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    @for (item of productImg; track item.id) {
+                      <a routerLink="item.link">
+                        <div class="relative overflow-hidden group">
+                          <img
+                            [src]="item.image"
+                            [alt]="item.title"
+                            class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div class="absolute inset-0 flex items-end p-3">
+                            <h3 class="text-white text-lg">
+                              {{ item.title }}
+                            </h3>
+                          </div>
+                        </div>
+                      </a>
                     }
                   </div>
-                </div>
-              }
-              @case ('Inspirations') {
-                <div class="grid grid-cols-6 gap-8">
-                  <div class="col-span-3">
-                    <div class="grid grid-cols-3 gap-8">
-                      <div>
-                        <h3 class="text-gray-400">Home</h3>
-                        <ul class="flex flex-col gap-1">
-                          @for (item of homeItems; track item.id) {
-                            <li class="text-lg">
-                              <a
-                                [routerLink]="item.link"
-                                class="hover:text-red-600"
-                                >{{ item.title }}</a
-                              >
-                            </li>
-                          }
-                        </ul>
-                      </div>
-                      <div>
-                        <h3 class="text-gray-400">Office spaces</h3>
-                        <ul class="flex flex-col gap-1">
-                          @for (item of officeItems; track item.id) {
-                            <li class="text-lg">
-                              <a
-                                [routerLink]="item.link"
-                                class="hover:text-red-600"
-                                >{{ item.title }}</a
-                              >
-                            </li>
-                          }
-                          <li class="text-base text-gray-400">
+                }
+                @case ('Professionals') {
+                  <div class="grid grid-cols-5 gap-6">
+                    <div>
+                      <h3 class="text-gray-400">Downloads</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of downloadItems; track item.id) {
+                          <li class="text-lg">
                             <a
-                              routerLink="/more"
-                              class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
-                              >More</a
+                              [routerLink]="item.link"
+                              class=" hover:text-red-600"
+                              >{{ item.title }}</a
                             >
                           </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h3 class="text-gray-400">Public spaces</h3>
-                        <ul class="flex flex-col gap-1">
-                          @for (item of publicItems; track item.id) {
-                            <li class="text-lg">
-                              <a
-                                [routerLink]="item.link"
-                                class="hover:text-red-600"
-                                >{{ item.title }}</a
-                              >
-                            </li>
-                          }
-                        </ul>
-                      </div>
-                      <div>
+                        }
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 class="text-gray-400">Tools</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of toolItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
+                            >
+                          </li>
+                        }
+                      </ul>
+                      <h3 class="text-gray-400 mt-8">Dealer</h3>
+                      <ul class="flex flex-col gap-1">
+                        <li class="text-lg">
+                          <a routerLink="/login" class="hover:text-red-600"
+                            >To the dealer login</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-span-3">
+                      <div class="flex justify-between items-start">
                         <h3 class="text-gray-400">Discover</h3>
-                        <ul class="flex flex-col gap-1">
-                          @for (item of homeStoriesItems; track item.id) {
-                            <li class="text-lg">
-                              <a
-                                [routerLink]="item.link"
-                                class="hover:text-red-600"
-                                >{{ item.title }}</a
-                              >
-                            </li>
-                          }
-                        </ul>
+                        <div class="text-gray-200">
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollLeft()"
+                            >arrow_back_ios</mat-icon
+                          >
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollRight()"
+                            >arrow_forward_ios</mat-icon
+                          >
+                        </div>
                       </div>
-                      <div>
-                        <h3 class="text-gray-400">Vitra offices & concepts</h3>
-                        <ul class="flex flex-col gap-1">
-                          @for (item of vitraItems; track item.id) {
-                            <li class="text-lg">
-                              <a
-                                [routerLink]="item.link"
-                                class="hover:text-red-600"
-                                >{{ item.title }}</a
+                      <div class="overflow-x-auto scrollbar-hide">
+                        <div class="flex gap-6 w-max">
+                          @for (item of professionalImage; track item.id) {
+                            <a routerLink="item.link">
+                              <div
+                                class="relative flex-shrink-0 w-64 overflow-hidden group"
                               >
-                            </li>
+                                <img
+                                  [src]="item.image"
+                                  [alt]="item.title"
+                                  class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div
+                                  class="absolute inset-0 flex items-end p-3"
+                                >
+                                  <h3 class="text-white text-lg">
+                                    {{ item.title }}
+                                  </h3>
+                                </div>
+                              </div>
+                            </a>
                           }
-                          <li class="text-base text-gray-400">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                @case ('Magazine') {
+                  <div class="grid grid-cols-5 gap-6">
+                    <div>
+                      <h3 class="text-gray-400">Categories</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of magazineItems; track item.id) {
+                          <li class="text-lg">
                             <a
-                              routerLink="/more"
-                              class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
-                              >More</a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
                             >
                           </li>
-                        </ul>
+                        }
+                        <li class="text-base text-gray-400">
+                          <a
+                            routerLink="/more"
+                            class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
+                            >More</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="col-span-4">
+                      <div class="flex justify-between items-start">
+                        <h3 class="text-gray-400">Article</h3>
+                        <div class="text-gray-200">
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollLeft()"
+                            >arrow_back_ios</mat-icon
+                          >
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollRight()"
+                            >arrow_forward_ios</mat-icon
+                          >
+                        </div>
                       </div>
-                      <div>
-                        <h3 class="text-gray-400">Themes</h3>
-                        <ul class="flex flex-col gap-1">
-                          @for (item of themesItems; track item.id) {
-                            <li class="text-lg">
-                              <a
-                                [routerLink]="item.link"
-                                class="hover:text-red-600"
-                                >{{ item.title }}</a
+                      <div class="overflow-x-auto scrollbar-hide">
+                        <div class="flex gap-6 w-max">
+                          @for (item of magazineImage; track item.id) {
+                            <a routerLink="item.link">
+                              <div
+                                class="relative flex-shrink-0 w-64 overflow-hidden group"
                               >
-                            </li>
+                                <img
+                                  [src]="item.image"
+                                  [alt]="item.title"
+                                  class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div
+                                  class="absolute inset-0 flex items-end p-3"
+                                >
+                                  <h3 class="text-white text-lg">
+                                    {{ item.title }}
+                                  </h3>
+                                </div>
+                              </div>
+                            </a>
                           }
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-span-3">
-                    <div class="flex justify-between items-start">
-                      <h3 class="text-gray-400">Discover</h3>
-                      <div class="text-gray-200">
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollLeft()"
-                          >arrow_back_ios</mat-icon
-                        >
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollRight()"
-                          >arrow_forward_ios</mat-icon
-                        >
-                      </div>
-                    </div>
-                    <div class="overflow-x-auto scrollbar-hide">
-                      <div class="flex gap-6 w-max">
-                        @for (item of inspirationsImage; track item.id) {
-                          <a routerLink="item.link">
-                            <div
-                              class="relative flex-shrink-0 w-64 overflow-hidden group"
-                            >
-                              <img
-                                [src]="item.image"
-                                [alt]="item.title"
-                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
-                              />
-                              <div class="absolute inset-0 flex items-end p-3">
-                                <h3 class="text-white text-lg">
-                                  {{ item.title }}
-                                </h3>
-                              </div>
-                            </div>
-                          </a>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-              @case ('Services') {
-                <div class="grid grid-cols-5 gap-6">
-                  <div>
-                    <h3 class="text-gray-400">Product services</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of productServicesItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class=" hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 class="text-gray-400">Office planning</h3>
-                    <ul class="flex flex-col gap-1">
-                      <li class="text-lg">
-                        <a routerLink="/studio" class=" hover:text-red-600"
-                          >Consulting & Planning Studio</a
-                        >
-                      </li>
-                    </ul>
-                    <h3 class="text-gray-400 mt-9">Circular Products</h3>
-                    <ul class="flex flex-col gap-1">
-                      <li class="text-lg">
-                        <a
-                          routerLink="/circle-stores"
-                          class=" hover:text-red-600"
-                          >Vitra Circle Stores</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  @for (item of productImg; track item.id) {
-                    <a routerLink="item.link">
-                      <div class="relative overflow-hidden group">
-                        <img
-                          [src]="item.image"
-                          [alt]="item.title"
-                          class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div class="absolute inset-0 flex items-end p-3">
-                          <h3 class="text-white text-lg">
-                            {{ item.title }}
-                          </h3>
                         </div>
                       </div>
-                    </a>
-                  }
-                </div>
-              }
-              @case ('Professionals') {
-                <div class="grid grid-cols-5 gap-6">
-                  <div>
-                    <h3 class="text-gray-400">Downloads</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of downloadItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class=" hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
+                    </div>
                   </div>
-                  <div>
-                    <h3 class="text-gray-400">Tools</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of toolItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                    </ul>
-                    <h3 class="text-gray-400 mt-8">Dealer</h3>
-                    <ul class="flex flex-col gap-1">
-                      <li class="text-lg">
-                        <a routerLink="/login" class="hover:text-red-600"
-                          >To the dealer login</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-span-3">
-                    <div class="flex justify-between items-start">
+                }
+                @case ('Vitra Campus') {
+                  <div class="grid grid-cols-5 gap-6">
+                    <div>
                       <h3 class="text-gray-400">Discover</h3>
-                      <div class="text-gray-200">
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollLeft()"
-                          >arrow_back_ios</mat-icon
-                        >
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollRight()"
-                          >arrow_forward_ios</mat-icon
-                        >
-                      </div>
-                    </div>
-                    <div class="overflow-x-auto scrollbar-hide">
-                      <div class="flex gap-6 w-max">
-                        @for (item of professionalImage; track item.id) {
-                          <a routerLink="item.link">
-                            <div
-                              class="relative flex-shrink-0 w-64 overflow-hidden group"
+                      <ul class="flex flex-col gap-1">
+                        @for (item of discoverItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
                             >
-                              <img
-                                [src]="item.image"
-                                [alt]="item.title"
-                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
-                              />
-                              <div class="absolute inset-0 flex items-end p-3">
-                                <h3 class="text-white text-lg">
-                                  {{ item.title }}
-                                </h3>
-                              </div>
-                            </div>
-                          </a>
+                          </li>
                         }
-                      </div>
+                      </ul>
                     </div>
-                  </div>
-                </div>
-              }
-              @case ('Magazine') {
-                <div class="grid grid-cols-5 gap-6">
-                  <div>
-                    <h3 class="text-gray-400">Categories</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of magazineItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
-                          >
-                        </li>
-                      }
-                      <li class="text-base text-gray-400">
-                        <a
-                          routerLink="/more"
-                          class="border-b border-b-gray-400 hover:text-red-600 hover:border-b-red-600"
-                          >More</a
-                        >
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-span-4">
-                    <div class="flex justify-between items-start">
-                      <h3 class="text-gray-400">Article</h3>
-                      <div class="text-gray-200">
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollLeft()"
-                          >arrow_back_ios</mat-icon
-                        >
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollRight()"
-                          >arrow_forward_ios</mat-icon
-                        >
-                      </div>
-                    </div>
-                    <div class="overflow-x-auto scrollbar-hide">
-                      <div class="flex gap-6 w-max">
-                        @for (item of magazineImage; track item.id) {
-                          <a routerLink="item.link">
-                            <div
-                              class="relative flex-shrink-0 w-64 overflow-hidden group"
+                    <div>
+                      <h3 class="text-gray-400">Visitor information</h3>
+                      <ul class="flex flex-col gap-1">
+                        @for (item of visitorItems; track item.id) {
+                          <li class="text-lg">
+                            <a
+                              [routerLink]="item.link"
+                              class="hover:text-red-600"
+                              >{{ item.title }}</a
                             >
-                              <img
-                                [src]="item.image"
-                                [alt]="item.title"
-                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
-                              />
-                              <div class="absolute inset-0 flex items-end p-3">
-                                <h3 class="text-white text-lg">
-                                  {{ item.title }}
-                                </h3>
-                              </div>
-                            </div>
-                          </a>
+                          </li>
                         }
-                      </div>
+                      </ul>
                     </div>
-                  </div>
-                </div>
-              }
-              @case ('Vitra Campus') {
-                <div class="grid grid-cols-5 gap-6">
-                  <div>
-                    <h3 class="text-gray-400">Discover</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of discoverItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
+                    <div class="col-span-3">
+                      <div class="flex justify-between items-start">
+                        <h3 class="text-gray-400">Highlights</h3>
+                        <div class="text-gray-200">
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollLeft()"
+                            >arrow_back_ios</mat-icon
                           >
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 class="text-gray-400">Visitor information</h3>
-                    <ul class="flex flex-col gap-1">
-                      @for (item of visitorItems; track item.id) {
-                        <li class="text-lg">
-                          <a
-                            [routerLink]="item.link"
-                            class="hover:text-red-600"
-                            >{{ item.title }}</a
+                          <mat-icon
+                            class="text-base cursor-pointer"
+                            (click)="scrollRight()"
+                            >arrow_forward_ios</mat-icon
                           >
-                        </li>
-                      }
-                    </ul>
-                  </div>
-                  <div class="col-span-3">
-                    <div class="flex justify-between items-start">
-                      <h3 class="text-gray-400">Highlights</h3>
-                      <div class="text-gray-200">
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollLeft()"
-                          >arrow_back_ios</mat-icon
-                        >
-                        <mat-icon
-                          class="text-base cursor-pointer"
-                          (click)="scrollRight()"
-                          >arrow_forward_ios</mat-icon
-                        >
-                      </div>
-                    </div>
-                    <div class="overflow-x-auto scrollbar-hide">
-                      <div class="flex gap-6 w-max">
-                        @for (item of campusImg; track item.id) {
-                          <a routerLink="item.link">
-                            <div
-                              class="relative flex-shrink-0 w-64 overflow-hidden group"
-                            >
-                              <img
-                                [src]="item.image"
-                                [alt]="item.title"
-                                class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
-                              />
-                              <div class="absolute inset-0 flex items-end p-3">
-                                <h3 class="text-white text-lg">
-                                  {{ item.title }}
-                                </h3>
-                              </div>
-                            </div>
-                          </a>
-                        }
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
-              @case ('About Vitra') {
-                <div class="flex justify-between items-start">
-                  <h3 class="text-gray-400">Discover About Vitra</h3>
-                  <div class="text-gray-200">
-                    <mat-icon
-                      class="text-base cursor-pointer"
-                      (click)="scrollLeft()"
-                      >arrow_back_ios</mat-icon
-                    >
-                    <mat-icon
-                      class="text-base cursor-pointer"
-                      (click)="scrollRight()"
-                      >arrow_forward_ios</mat-icon
-                    >
-                  </div>
-                </div>
-                <div class="grid grid-cols-5 gap-6">
-                  @for (item of aboutVitraItems; track item.id) {
-                    <a [routerLink]="item.link">
-                      <div class="relative overflow-hidden group">
-                        <img
-                          [src]="item.image"
-                          [alt]="item.title"
-                          class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div class="absolute inset-0 flex items-end p-3">
-                          <h3 class="text-white text-lg">
-                            {{ item.title }}
-                          </h3>
                         </div>
                       </div>
-                    </a>
-                  }
-                </div>
+                      <div class="overflow-x-auto scrollbar-hide">
+                        <div class="flex gap-6 w-max">
+                          @for (item of campusImg; track item.id) {
+                            <a routerLink="item.link">
+                              <div
+                                class="relative flex-shrink-0 w-64 overflow-hidden group"
+                              >
+                                <img
+                                  [src]="item.image"
+                                  [alt]="item.title"
+                                  class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div
+                                  class="absolute inset-0 flex items-end p-3"
+                                >
+                                  <h3 class="text-white text-lg">
+                                    {{ item.title }}
+                                  </h3>
+                                </div>
+                              </div>
+                            </a>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+                @case ('About Vitra') {
+                  <div class="flex justify-between items-start">
+                    <h3 class="text-gray-400">Discover About Vitra</h3>
+                    <div class="text-gray-200">
+                      <mat-icon
+                        class="text-base cursor-pointer"
+                        (click)="scrollLeft()"
+                        >arrow_back_ios</mat-icon
+                      >
+                      <mat-icon
+                        class="text-base cursor-pointer"
+                        (click)="scrollRight()"
+                        >arrow_forward_ios</mat-icon
+                      >
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-5 gap-6">
+                    @for (item of aboutVitraItems; track item.id) {
+                      <a [routerLink]="item.link">
+                        <div class="relative overflow-hidden group">
+                          <img
+                            [src]="item.image"
+                            [alt]="item.title"
+                            class="w-full object-cover aspect-[5/7] transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div class="absolute inset-0 flex items-end p-3">
+                            <h3 class="text-white text-lg">
+                              {{ item.title }}
+                            </h3>
+                          </div>
+                        </div>
+                      </a>
+                    }
+                  </div>
+                }
               }
-            }
+            </div>
           </div>
-        </div>
+        }
+      </div>
+      @if (activeDropdown()) {
         <div
           class="fixed inset-0 bg-black bg-opacity-30 z-30"
           (click)="closeDropdown()"
@@ -952,6 +967,13 @@ export class HeaderComponent {
 
   closeDropdown() {
     this.dropdownService.closeDropdown();
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (window.innerWidth < 1024) {
+      this.closeDropdown();
+    }
   }
 
   isMenuOpen = signal(false);
