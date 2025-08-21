@@ -231,7 +231,6 @@ interface NavImageItem {
                       >
                         {{ child.title }}
                       </a>
-                      <mat-icon>arrow_forward</mat-icon>
                     </li>
                   }
                 }
@@ -255,6 +254,7 @@ interface NavImageItem {
                     ) {
                       <a
                         [routerLink]="imageItem.link"
+                        class="py-3"
                         [class]="
                           selectedParent()!.imageLayout === 'vertical'
                             ? 'w-full'
