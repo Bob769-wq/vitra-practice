@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -70,7 +70,9 @@ interface Examples {
       <div class="flex flex-col items-center p-5">
         <h1 class="text-3xl">Slow Chair & Slow Sofa</h1>
         <p class=" text-xl mb-8 ">A haven for slowing down</p>
-        <button class="bg-gray-900 text-white w-full py-4">MORE DETAILS</button>
+        <button class="bg-gray-900 text-white w-full py-4 hover:bg-gray-500">
+          MORE DETAILS
+        </button>
       </div>
     </section>
 

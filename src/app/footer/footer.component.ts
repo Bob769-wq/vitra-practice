@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 interface SocialLink {
@@ -340,4 +345,6 @@ export class FooterComponent {
         }) as Record<SectionKey, boolean>
     );
   }
+
+  protected readonly close = close;
 }

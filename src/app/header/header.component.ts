@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-
-// TODO: can combine these interfaces into a single one if they share common properties done
+import { FormsModule } from '@angular/forms';
+import { DropdownService } from './dropdown.service';
 
 interface MenuIconList {
   id: number;
@@ -55,13 +60,16 @@ interface NavImageItem {
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, MatIconModule, RouterLink],
+  imports: [CommonModule, MatIconModule, RouterLink, FormsModule],
   template: `
     <div class="relative">
       <header
-        class="px-5 bg-white z-50 m-auto max-w-7xl py-3 flex flex-col lg:px-0"
+        class="px-5 bg-white z-50 isolate m-auto max-w-7xl py-3 flex flex-col lg:px-0"
       >
-        <div class="hidden lg:flex justify-end gap-4 text-gray-400">
+        <div
+          class="hidden lg:flex justify-end gap-4 text-gray-400"
+          (click)="closeDropdown()"
+        >
           <a
             routerLink="/find-vitra"
             class="hover:text-red-600 flex items-center"
@@ -89,7 +97,9 @@ interface NavImageItem {
                     [routerLink]="item.link"
                     class="hover:text-red-600"
                     (mouseenter)="
-                      item.dropDown ? setActiveDropdown(item.title) : null
+                      item.dropDown
+                        ? dropdownService.setActiveDropdown(item.title)
+                        : null
                     "
                   >
                     {{ item.title }}
@@ -310,11 +320,9 @@ interface NavImageItem {
         <div
           class="absolute top-full left-0 right-0 w-full z-40 bg-white border-t"
           (mouseenter)="setActiveDropdown(activeDropdown()!)"
-          (mouseleave)="setActiveDropdown(null)"
         >
           <div class="max-w-7xl mx-auto py-8">
-            @switch (activeDropdown()) {
-              <!--              TODO: these should not use id done-->
+            @switch (dropdownService.activeDropdown()) {
               @case ('Products') {
                 <div class="grid grid-cols-6 gap-6">
                   <div>
@@ -579,8 +587,16 @@ interface NavImageItem {
                     <div class="flex justify-between items-start">
                       <h3 class="text-gray-400">Discover</h3>
                       <div class="text-gray-200">
-                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
-                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollLeft()"
+                          >arrow_back_ios</mat-icon
+                        >
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollRight()"
+                          >arrow_forward_ios</mat-icon
+                        >
                       </div>
                     </div>
                     <div class="overflow-x-auto scrollbar-hide">
@@ -704,8 +720,16 @@ interface NavImageItem {
                     <div class="flex justify-between items-start">
                       <h3 class="text-gray-400">Discover</h3>
                       <div class="text-gray-200">
-                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
-                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollLeft()"
+                          >arrow_back_ios</mat-icon
+                        >
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollRight()"
+                          >arrow_forward_ios</mat-icon
+                        >
                       </div>
                     </div>
                     <div class="overflow-x-auto scrollbar-hide">
@@ -760,8 +784,16 @@ interface NavImageItem {
                     <div class="flex justify-between items-start">
                       <h3 class="text-gray-400">Article</h3>
                       <div class="text-gray-200">
-                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
-                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollLeft()"
+                          >arrow_back_ios</mat-icon
+                        >
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollRight()"
+                          >arrow_forward_ios</mat-icon
+                        >
                       </div>
                     </div>
                     <div class="overflow-x-auto scrollbar-hide">
@@ -823,8 +855,16 @@ interface NavImageItem {
                     <div class="flex justify-between items-start">
                       <h3 class="text-gray-400">Highlights</h3>
                       <div class="text-gray-200">
-                        <mat-icon class="text-base">arrow_back_ios</mat-icon>
-                        <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollLeft()"
+                          >arrow_back_ios</mat-icon
+                        >
+                        <mat-icon
+                          class="text-base cursor-pointer"
+                          (click)="scrollRight()"
+                          >arrow_forward_ios</mat-icon
+                        >
                       </div>
                     </div>
                     <div class="overflow-x-auto scrollbar-hide">
@@ -856,8 +896,16 @@ interface NavImageItem {
                 <div class="flex justify-between items-start">
                   <h3 class="text-gray-400">Discover About Vitra</h3>
                   <div class="text-gray-200">
-                    <mat-icon class="text-base">arrow_back_ios</mat-icon>
-                    <mat-icon class="text-base">arrow_forward_ios</mat-icon>
+                    <mat-icon
+                      class="text-base cursor-pointer"
+                      (click)="scrollLeft()"
+                      >arrow_back_ios</mat-icon
+                    >
+                    <mat-icon
+                      class="text-base cursor-pointer"
+                      (click)="scrollRight()"
+                      >arrow_forward_ios</mat-icon
+                    >
                   </div>
                 </div>
                 <div class="grid grid-cols-5 gap-6">
@@ -882,16 +930,28 @@ interface NavImageItem {
             }
           </div>
         </div>
+        <div
+          class="fixed inset-0 bg-black bg-opacity-30 z-30"
+          (click)="closeDropdown()"
+        ></div>
       }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  activeDropdown = signal<string | null>(null);
+  dropdownService = inject(DropdownService);
+
+  activeDropdown() {
+    return this.dropdownService.activeDropdown();
+  }
 
   setActiveDropdown(title: string | null) {
-    this.activeDropdown.set(title);
+    this.dropdownService.setActiveDropdown(title);
+  }
+
+  closeDropdown() {
+    this.dropdownService.closeDropdown();
   }
 
   isMenuOpen = signal(false);
@@ -1814,6 +1874,20 @@ export class HeaderComponent {
   goBack() {
     this.showSubmenu.set(false);
     this.selectedParent.set(null);
+  }
+
+  scrollLeft() {
+    const container = document.querySelector('.overflow-x-auto');
+    if (container) {
+      container.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  }
+
+  scrollRight() {
+    const container = document.querySelector('.overflow-x-auto');
+    if (container) {
+      container.scrollBy({ left: 300, behavior: 'smooth' });
+    }
   }
 
   NavList: NavItem[] = [
